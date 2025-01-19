@@ -1,7 +1,12 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'; // Import Icon from a library
 
 export default function HomeScreen() {
+  const handleMenuPress = () => {
+    console.log('Menu icon pressed');
+  };
+
   const handleFirstButtonPress = () => {
     console.log('First button pressed');
   };
@@ -12,12 +17,23 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>TechAid</Text>
+      {/* Navigation Bar */}
+      <View style={styles.navbar}>
+        <TouchableOpacity onPress={handleMenuPress}>
+          <Icon name="menu" size={30} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.navbarTitle}>TechAid</Text>
+      </View>
+
+      {/* Buttons */}
       <TouchableOpacity style={styles.button} onPress={handleFirstButtonPress}>
-        <Text style={styles.buttonText}>First Button</Text>
+        <Text style={styles.buttonText}>Donate Device</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleSecondButtonPress}>
-        <Text style={styles.buttonText}>Second Button</Text>
+        <Text style={styles.buttonText}>Apply for Device</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleSecondButtonPress}>
+        <Text style={styles.buttonText}>Wifi Donation</Text>
       </TouchableOpacity>
     </View>
   );
@@ -26,14 +42,25 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+    paddingTop: 50,
   },
-  title: {
-    fontSize: 32,
+  navbar: {
+    width: '100%',
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  navbarTitle: {
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 40,
+    marginLeft: 20,
+    marginTop: 0,
   },
   button: {
     backgroundColor: '#007BFF',
@@ -41,8 +68,9 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 40,
     marginVertical: 10,
-    width: '80%',
+    width: '60%',
     alignItems: 'center',
+    marginTop:5,
   },
   buttonText: {
     color: '#FFFFFF',
