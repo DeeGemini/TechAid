@@ -8,7 +8,7 @@ const HomeScreen = () => {
   };
 
   const handleSecondButtonPress = () => {
-    // Navigation or logic for the second button
+    router.push('/signup')
   };
 
   return (
