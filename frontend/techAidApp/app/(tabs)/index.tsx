@@ -1,52 +1,25 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { AppRegistry } from 'react-native';
+import HomeScreen from '../../src/screens/HomeScreen';
+import SignupScreen from '../../src/screens/SignupScreen';
 
-export default function HomeScreen() {
-  const handleFirstButtonPress = () => {
-    console.log('First button pressed');
-  };
+// const Stack = createStackNavigator();
 
-  const handleSecondButtonPress = () => {
-    console.log('Second button pressed');
-  };
+// const App: React.FC = () => {
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator initialRouteName="Home">
+//         <Stack.Screen name="Home" component={HomeScreen} />
+//         <Stack.Screen name="Signup" component={SignupScreen} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>TechAid</Text>
-      <TouchableOpacity style={styles.button} onPress={handleFirstButtonPress}>
-        <Text style={styles.buttonText}>First Button</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleSecondButtonPress}>
-        <Text style={styles.buttonText}>Second Button</Text>
-      </TouchableOpacity>
-    </View>
-  );
+//AppRegistry.registerComponent('main', () => App);
+
+export default function Index() {
+  return <HomeScreen />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 40,
-  },
-  button: {
-    backgroundColor: '#007BFF',
-    borderRadius: 25,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    marginVertical: 10,
-    width: '80%',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
