@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   inputContainer: {
-    width: '100%',
+    width: '70%',
     marginBottom: 20,
   },
   input: {
@@ -100,13 +100,14 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     color: '#007BFF',
     fontSize: 14,
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#007BFF',
     borderRadius: 25,
     paddingVertical: 15,
     paddingHorizontal: 40,
-    width: '100%',
+    width: '70%',
     alignItems: 'center',
   },
   buttonText: {

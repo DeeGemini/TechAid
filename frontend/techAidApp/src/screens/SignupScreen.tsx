@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   ScrollView,
 } from 'react-native';
 import { router } from 'expo-router';
+import * as Google from 'expo-auth-session/providers/google';
+import { AntDesign } from '@expo/vector-icons';
 
 const SignupScreen = () => {
   const [email, setEmail] = useState('');
@@ -15,8 +17,56 @@ const SignupScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
 
+  // Setup Google OAuth request
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: 'YOUR_EXPO_CLIENT_ID',
+    iosClientId: 'YOUR_IOS_CLIENT_ID',
+    androidClientId: 'YOUR_ANDROID_CLIENT_ID',
+    webClientId: 'YOUR_WEB_CLIENT_ID',
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { authentication } = response;
+      // Handle successful Google authentication
+      handleGoogleSignup(authentication);
+    }
+  }, [response]);
+
+  const handleGoogleSignup = async (authentication) => {
+    try {
+      // Exchange the token for user information
+      const userInfoResponse = await fetch(
+        'https://www.googleapis.com/userinfo/v2/me',
+        {
+          headers: { Authorization: `Bearer ${authentication.accessToken}` },
+        }
+      );
+      
+      const userInfo = await userInfoResponse.json();
+      console.log('Google user info:', userInfo);
+      
+      // Here you would typically:
+      // 1. Check if the user exists in your database
+      // 2. Create a new account if they don't
+      // 3. Sign them in
+      
+      // For demo purposes, we'll just log the data
+      console.log('Signed up with Google:', {
+        email: userInfo.email,
+        name: userInfo.name,
+        id: userInfo.id,
+      });
+      
+      // Navigate to the next screen after successful signup
+      // router.push('/home');
+    } catch (error) {
+      console.error('Error signing up with Google:', error);
+    }
+  };
+
   const handleSignUp = () => {
-    // Add your signup logic here
+    // Add your email/password signup logic here
     console.log('Sign up pressed');
   };
 
@@ -36,7 +86,6 @@ const SignupScreen = () => {
           onChangeText={setFullName}
           autoCapitalize="words"
         />
-        
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -45,7 +94,6 @@ const SignupScreen = () => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -53,7 +101,6 @@ const SignupScreen = () => {
           onChangeText={setPassword}
           secureTextEntry
         />
-
         <TextInput
           style={styles.input}
           placeholder="Confirm Password"
@@ -62,11 +109,26 @@ const SignupScreen = () => {
           secureTextEntry
         />
       </View>
-
+      
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
-
+      
+      <View style={styles.orContainer}>
+        <View style={styles.divider} />
+        <Text style={styles.orText}>OR</Text>
+        <View style={styles.divider} />
+      </View>
+      
+      <TouchableOpacity 
+        style={styles.googleButton}
+        onPress={() => promptAsync()}
+        disabled={!request}
+      >
+        <AntDesign name="google" size={24} color="#4285F4" style={styles.googleIcon} />
+        <Text style={styles.googleButtonText}>Sign up with Google</Text>
+      </TouchableOpacity>
+      
       <View style={styles.signInContainer}>
         <Text style={styles.signInText}>Already have an account?</Text>
         <TouchableOpacity onPress={handleSignIn}>
@@ -116,6 +178,42 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  orContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    marginVertical: 20,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E0E0E0',
+  },
+  orText: {
+    paddingHorizontal: 10,
+    color: '#666666',
+    fontSize: 16,
+  },
+  googleButton: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#DDDDDD',
+    borderRadius: 25,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  googleIcon: {
+    marginRight: 10,
+  },
+  googleButtonText: {
+    color: '#333333',
+    fontSize: 16,
+    fontWeight: '500',
+  },
   signInContainer: {
     flexDirection: 'row',
     marginTop: 20,
@@ -134,3 +232,5 @@ const styles = StyleSheet.create({
 });
 
 export default SignupScreen;
+
+
