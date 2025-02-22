@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,58 @@ import {
   ScrollView,
 } from 'react-native';
 import { router } from 'expo-router';
+import * as Google from 'expo-auth-session/providers/google';
+import { AntDesign } from '@expo/vector-icons';
 
 const SigninScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // Setup Google OAuth request
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: 'YOUR_EXPO_CLIENT_ID',
+    iosClientId: 'YOUR_IOS_CLIENT_ID',
+    androidClientId: 'YOUR_ANDROID_CLIENT_ID',
+    webClientId: 'YOUR_WEB_CLIENT_ID',
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { authentication } = response;
+      handleGoogleSignin(authentication);
+    }
+  }, [response]);
+
+  const handleGoogleSignin = async (authentication) => {
+    try {
+      const userInfoResponse = await fetch(
+        'https://www.googleapis.com/userinfo/v2/me',
+        {
+          headers: { Authorization: `Bearer ${authentication.accessToken}` },
+        }
+      );
+      
+      const userInfo = await userInfoResponse.json();
+      console.log('Google user info:', userInfo);
+      
+      // Here you would typically:
+      // 1. Verify the user exists in your database
+      // 2. Sign them in
+      // 3. Navigate to the home screen
+      
+      // For demo purposes, we'll just log the data
+      console.log('Signed in with Google:', {
+        email: userInfo.email,
+        name: userInfo.name,
+        id: userInfo.id,
+      });
+      
+      // Navigate to the next screen after successful signin
+      // router.push('/home');
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+    }
+  };
 
   const handleSignIn = () => {
     // Add your signin logic here
@@ -35,7 +83,6 @@ const SigninScreen = () => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -45,7 +92,7 @@ const SigninScreen = () => {
         />
       </View>
 
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.forgotPasswordContainer}
         onPress={() => router.push('/forgot-password')}
       >
@@ -54,6 +101,21 @@ const SigninScreen = () => {
 
       <TouchableOpacity style={styles.button} onPress={handleSignIn}>
         <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
+
+      <View style={styles.orContainer}>
+        <View style={styles.divider} />
+        <Text style={styles.orText}>OR</Text>
+        <View style={styles.divider} />
+      </View>
+
+      <TouchableOpacity 
+        style={styles.googleButton}
+        onPress={() => promptAsync()}
+        disabled={!request}
+      >
+        <AntDesign name="google" size={24} color="#4285F4" style={styles.googleIcon} />
+        <Text style={styles.googleButtonText}>Sign in with Google</Text>
       </TouchableOpacity>
 
       <View style={styles.signUpContainer}>
@@ -93,14 +155,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   forgotPasswordContainer: {
-    width: '100%',
+    width: '70%',
     alignItems: 'flex-end',
     marginBottom: 20,
   },
   forgotPasswordText: {
     color: '#007BFF',
     fontSize: 14,
-    alignItems: 'center',
   },
   button: {
     backgroundColor: '#007BFF',
@@ -114,6 +175,42 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  orContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '70%',
+    marginVertical: 20,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E0E0E0',
+  },
+  orText: {
+    paddingHorizontal: 10,
+    color: '#666666',
+    fontSize: 16,
+  },
+  googleButton: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#DDDDDD',
+    borderRadius: 25,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    width: '70%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  googleIcon: {
+    marginRight: 10,
+  },
+  googleButtonText: {
+    color: '#333333',
+    fontSize: 16,
+    fontWeight: '500',
   },
   signUpContainer: {
     flexDirection: 'row',
