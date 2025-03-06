@@ -14,6 +14,13 @@ export default function RootLayout() {
           presentation: 'modal'  // or 'card' for standard navigation
         }} 
       />
+      <Stack.Screen 
+        name="signin" 
+        options={{
+          title: 'Sign In',
+          presentation: 'modal'  // or 'card' for standard navigation
+        }} 
+      />
     </Stack>
   );
 }

@@ -11,11 +11,9 @@ import { router } from 'expo-router';
 import * as Google from 'expo-auth-session/providers/google';
 import { AntDesign } from '@expo/vector-icons';
 
-const SignupScreen = () => {
+const SigninScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [fullName, setFullName] = useState('');
 
   // Setup Google OAuth request
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -28,14 +26,12 @@ const SignupScreen = () => {
   useEffect(() => {
     if (response?.type === 'success') {
       const { authentication } = response;
-      // Handle successful Google authentication
-      handleGoogleSignup(authentication);
+      handleGoogleSignin(authentication);
     }
   }, [response]);
 
-  const handleGoogleSignup = async (authentication) => {
+  const handleGoogleSignin = async (authentication) => {
     try {
-      // Exchange the token for user information
       const userInfoResponse = await fetch(
         'https://www.googleapis.com/userinfo/v2/me',
         {
@@ -47,45 +43,38 @@ const SignupScreen = () => {
       console.log('Google user info:', userInfo);
       
       // Here you would typically:
-      // 1. Check if the user exists in your database
-      // 2. Create a new account if they don't
-      // 3. Sign them in
+      // 1. Verify the user exists in your database
+      // 2. Sign them in
+      // 3. Navigate to the home screen
       
       // For demo purposes, we'll just log the data
-      console.log('Signed up with Google:', {
+      console.log('Signed in with Google:', {
         email: userInfo.email,
         name: userInfo.name,
         id: userInfo.id,
       });
       
-      // Navigate to the next screen after successful signup
+      // Navigate to the next screen after successful signin
       // router.push('/home');
     } catch (error) {
-      console.error('Error signing up with Google:', error);
+      console.error('Error signing in with Google:', error);
     }
   };
 
-  const handleSignUp = () => {
-    // Add your email/password signup logic here
-    console.log('Sign up pressed');
+  const handleSignIn = () => {
+    // Add your signin logic here
+    console.log('Sign in pressed');
   };
 
-  const handleSignIn = () => {
-    router.push('/signin');
+  const handleSignUp = () => {
+    router.push('/signup');
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+      <Text style={styles.title}>Welcome Back</Text>
       
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Full Name"
-          value={fullName}
-          onChangeText={setFullName}
-          autoCapitalize="words"
-        />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -101,38 +90,38 @@ const SignupScreen = () => {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-        />
       </View>
-      
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+
+      <TouchableOpacity
+        style={styles.forgotPasswordContainer}
+        onPress={() => router.push('/forgot-password')}
+      >
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
-      
+
+      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
+
       <View style={styles.orContainer}>
         <View style={styles.divider} />
         <Text style={styles.orText}>OR</Text>
         <View style={styles.divider} />
       </View>
-      
+
       <TouchableOpacity 
         style={styles.googleButton}
         onPress={() => promptAsync()}
         disabled={!request}
       >
         <AntDesign name="google" size={24} color="#4285F4" style={styles.googleIcon} />
-        <Text style={styles.googleButtonText}>Sign up with Google</Text>
+        <Text style={styles.googleButtonText}>Sign in with Google</Text>
       </TouchableOpacity>
-      
-      <View style={styles.signInContainer}>
-        <Text style={styles.signInText}>Already have an account?</Text>
-        <TouchableOpacity onPress={handleSignIn}>
-          <Text style={styles.signInLink}>Sign In</Text>
+
+      <View style={styles.signUpContainer}>
+        <Text style={styles.signUpText}>Don't have an account?</Text>
+        <TouchableOpacity onPress={handleSignUp}>
+          <Text style={styles.signUpLink}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -154,7 +143,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   inputContainer: {
-    width: '100%',
+    width: '70%',
     marginBottom: 20,
   },
   input: {
@@ -165,12 +154,21 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 16,
   },
+  forgotPasswordContainer: {
+    width: '70%',
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  forgotPasswordText: {
+    color: '#007BFF',
+    fontSize: 14,
+  },
   button: {
     backgroundColor: '#007BFF',
     borderRadius: 25,
     paddingVertical: 15,
     paddingHorizontal: 40,
-    width: '100%',
+    width: '70%',
     alignItems: 'center',
   },
   buttonText: {
@@ -181,7 +179,7 @@ const styles = StyleSheet.create({
   orContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '80%',
+    width: '70%',
     marginVertical: 20,
   },
   divider: {
@@ -202,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 12,
     paddingHorizontal: 15,
-    width: '100%',
+    width: '70%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -214,23 +212,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  signInContainer: {
+  signUpContainer: {
     flexDirection: 'row',
     marginTop: 20,
     alignItems: 'center',
   },
-  signInText: {
+  signUpText: {
     fontSize: 16,
     color: '#666666',
     marginRight: 5,
   },
-  signInLink: {
+  signUpLink: {
     fontSize: 16,
     color: '#007BFF',
     fontWeight: 'bold',
   },
 });
 
-export default SignupScreen;
-
-
+export default SigninScreen;
