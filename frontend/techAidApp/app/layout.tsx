@@ -21,6 +21,14 @@ export default function RootLayout() {
           presentation: 'modal'  // or 'card' for standard navigation
         }} 
       />
+      <Stack.Screen 
+  name="dashboard" 
+  options={{ 
+    headerShown: false,
+    // Prevent going back to login
+    gestureEnabled: false,
+  }} 
+/>
     </Stack>
   );
 }
