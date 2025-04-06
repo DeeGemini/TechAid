@@ -22,13 +22,19 @@ export default function RootLayout() {
         }} 
       />
       <Stack.Screen 
-  name="dashboard" 
-  options={{ 
-    headerShown: false,
-    // Prevent going back to login
-    gestureEnabled: false,
-  }} 
-/>
+        name="dashboard" 
+        options={{ 
+          title: 'Dashboard',
+          presentation: 'modal',
+        }} 
+      />
+      <Stack.Screen 
+        name="forgot-password" 
+        options={{ 
+          title: 'Forgot Password',
+          presentation: 'modal',  // or 'card' for standard navigation
+        }} 
+      />
     </Stack>
   );
 }
