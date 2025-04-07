@@ -11,7 +11,6 @@ import { router } from 'expo-router';
 import * as Google from 'expo-auth-session/providers/google';
 import { AntDesign } from '@expo/vector-icons';
 
-
 const SigninScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,12 +37,12 @@ const SigninScreen = () => {
           headers: { Authorization: `Bearer ${authentication.accessToken}` },
         }
       );
-      
+
       const userInfo = await userInfoResponse.json();
       console.log('Google user info:', userInfo);
-      
+
       // Process user information here
-      
+
       // Navigate to the home screen or dashboard after successful signin
       // router.push('/home');
     } catch (error) {
@@ -56,12 +55,16 @@ const SigninScreen = () => {
     console.log('Sign in pressed');
   };
 
+  const handleForgotPassword = () => {
+    router.push('/forgot-password');
+  };
+
   const handleSignUp = () => {
     router.push('/signup');
   };
 
   const handleGoToDashboard = () => {
-    router.push('/dashboard'); // Navigate directly to the Dashboard
+    router.push('/dasnboard'); // Navigate directly to the Dashboard
   };
 
   return (
@@ -88,7 +91,7 @@ const SigninScreen = () => {
 
       <TouchableOpacity
         style={styles.forgotPasswordContainer}
-        onPress={() => router.push('/forgot-password')}
+        onPress={handleForgotPassword}
       >
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
@@ -121,7 +124,7 @@ const SigninScreen = () => {
 
       {/* Additional button to navigate directly to the Dashboard */}
       <TouchableOpacity onPress={handleGoToDashboard}>
-        <Text style={styles.signUpLink}>Dashboard</Text>
+        <Text style={styles.dashboardLink}>Dashboard</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -225,6 +228,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#007BFF',
     fontWeight: 'bold',
+  },
+  dashboardLink: {  // New style property
+    fontSize: 16,
+    color: '#007BFF',
+    fontWeight: 'bold',
+    marginTop: 20,
   },
 });
 
