@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -8,21 +9,33 @@ import {
   ScrollView,
   Alert,
   Image,
+  ImageSourcePropType,
 } from 'react-native';
-//import { useAuth } from '../context/AuthContext'; // Assuming you have AuthContext
 
-const DashboardScreen = () => {
-  const { user } = useAuth();
-  const [gadgetName, setGadgetName] = useState('');
-  const [description, setDescription] = useState('');
-  const [condition, setCondition] = useState('');
-  const [location, setLocation] = useState('');
-  const [image, setImage] = useState(null);
+// Mock user type
+type User = {
+  fullName: string;
+  email: string;
+};
+
+// Mock user data
+const mockUser: User = {
+  fullName: 'Test User',
+  email: 'test@example.com',
+};
+
+const DashboardScreen: React.FC = () => {
+  // Using mock user directly instead of auth
+  const user = mockUser;
+
+  const [gadgetName, setGadgetName] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [condition, setCondition] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+  const [image, setImage] = useState<ImageSourcePropType | null>(null);
 
   const handleDonate = () => {
-    // Add donation logic here
     Alert.alert('Success', 'Gadget donation submitted successfully!');
-    // Reset form
     setGadgetName('');
     setDescription('');
     setCondition('');
@@ -31,12 +44,10 @@ const DashboardScreen = () => {
   };
 
   const handleRequest = () => {
-    // Navigate to request screen
     Alert.alert('Navigation', 'Navigate to Request Screen');
   };
 
   const handleWifiConnection = () => {
-    // Navigate to WiFi connection screen
     Alert.alert('Navigation', 'Navigate to WiFi Connection Screen');
   };
 
@@ -44,7 +55,7 @@ const DashboardScreen = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Welcome, {user?.fullName || 'User'}</Text>
+        <Text style={styles.headerTitle}>Welcome, {user.fullName}</Text>
       </View>
 
       {/* Navigation Bar */}
@@ -123,7 +134,7 @@ const DashboardScreen = () => {
 
         {image && (
           <Image
-            source={{ uri: image }}
+            source={image}
             style={styles.previewImage}
           />
         )}
