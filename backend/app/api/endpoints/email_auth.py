@@ -4,33 +4,38 @@ Email-only authentication.
 from datetime import datetime
 import uuid
 from fastapi import APIRouter, status, HTTPException, BackgroundTasks
+from fastapi import Form, UploadFile, File
 from fastapi.responses import JSONResponse, RedirectResponse
+
+from app.core.config import HOME_URL, EMAIL_REGISTER_URL, LOGIN_URL, PROFILE_PICTURE_URL, API_URL
+from app.schemas.general.responses import MessageResponse, TokenResponse
+from app.schemas.users.schools import SchoolBase, School
+from app.schemas.users.shared import EmailLoginRequestBody
+from app.services.schools import create_school
+from app.services.user import user_exists
 from app.utils.auth_utils import generate_verification_token, generate_access_token, generate_refresh_token
 from app.utils.auth_utils import store_auth_data, decode_token, store_registration_data, get_registration_data
 from app.utils.email_auth_utils import send_email_verification_link
-from app.services.user_services import create_user, find_user_by_email, update_user
-from app.schemas.users.user_responses import MessageResponse, TokenResponse
-from app.schemas.users.user_requests import EmailRegistrationData, LoginRequestBody
-from app.schemas.users.user_updates import UserUpdate
-from app.core.config import HOME_URL, EMAIL_REGISTER_URL, LOGIN_URL, PROFILE_PICTURE_URL
+from app.utils.general import save_verification_document, validate_pdf
+
+
 
 
 email_auth_router = APIRouter()
 
 @email_auth_router.post('/login', response_model=MessageResponse)
-async def login(body: LoginRequestBody, background_tasks: BackgroundTasks):
+async def login(body: EmailLoginRequestBody, background_tasks: BackgroundTasks):
     """
     Login with email.
     """
     email = body.email
 
-    user = await find_user_by_email(email)
+    user = user_exists(email)
     if user:
         token = generate_verification_token({"sub": email, "registered": True})
     else:
         token = generate_verification_token({"sub": email, "registered": False})
 
-    # email_is_send = send_email_verification_link(email, token)
     background_tasks.add_task(send_email_verification_link, email, token)
 
     return JSONResponse(status_code=status.HTTP_200_OK,
@@ -49,58 +54,82 @@ async def verify(token: str):
 
     registered = payload.get("registered")
     email = payload.get("sub")
-    user = await find_user_by_email(email)
+    user = user_exists(email)
     if registered and user:
-        user_id = str(user.get("_id"))
-        session_id = str(uuid.uuid4())
-        access_token = await generate_access_token({"sub": user_id, "session_id": session_id})
-        refresh_token = await generate_refresh_token({"sub": user_id, "session_id": session_id})
-        state_id = await store_auth_data({"access_token": access_token, "refresh_token": refresh_token})
+        access_token = generate_access_token({"sub": email})
+        refresh_token = generate_refresh_token({"sub": email})
+        state_id = store_auth_data({"access_token": access_token, "refresh_token": refresh_token})
         response = RedirectResponse(url=f"{LOGIN_URL}?state_id={state_id}")
         return response
-    registration_id = await store_registration_data(user_data={"email": email}, registration_method="email")
+    registration_id = store_registration_data(user_data={"email": email}, registration_method="email")
     response = RedirectResponse(url=f"{EMAIL_REGISTER_URL}?registration_id={registration_id}")
     return response
 
-@email_auth_router.post('/register', response_model=TokenResponse)
-async def register_with_email(registration_data: EmailRegistrationData):
+@email_auth_router.post('/register/school', response_model=SchoolBase)
+async def register_school(
+    name: str = Form(...),
+    phone_number: str = Form(...),
+    geo_coordinates: str = Form(...),
+    school_registration_number: str = Form(...),
+    verification_document: UploadFile = File(...),
+    registration_id: str = Form(...)
+):
     """
-    Register user.
+    Register school.
     """
-    registration_id = registration_data.registration_id
     if registration_id[0:2] != "e-":
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                              detail="Invalid registration ID.")
-    stored_data = await get_registration_data(registration_id)
+    stored_data = get_registration_data(registration_id)
 
     if not stored_data:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                              detail="Unauthorized access.")
-
+    
     email = stored_data.get("email")
-    user_exists = await find_user_by_email(email)
-
-    if user_exists:
+    school_exists = user_exists(email)
+    if school_exists:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                             detail="User already exists.")
+                            detail="School already exists.")
 
-    user_obj = registration_data.model_dump()
-    user_obj["picture"] = PROFILE_PICTURE_URL
-    user_obj.update(stored_data)
-    del user_obj["registration_id"]
-    inserted_user_id = await create_user(user_obj)
-    if not inserted_user_id:
+    if not verification_document:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Verification document is required.")
+
+    # Validate the file type
+    validate_pdf(verification_document)
+
+    # Save the verification document
+    filename = save_verification_document(verification_document)
+
+    file_url = f"{API_URL}/uploads/{filename}"
+
+    # Create a school object
+    school_obj = {
+        "name": name,
+        "email": email,
+        "phone_number": phone_number,
+        "geo_coordinates": geo_coordinates,
+        "school_registration_number": school_registration_number,
+        "verification_document": file_url,
+        "created_at": datetime.now(),
+        "updated_at": datetime.now(),
+        "is_verified": False
+    }
+
+    # Store the school object in the database
+    inserted_school_id = create_school(school_obj)
+    school_obj["school_id"] = inserted_school_id
+    if not inserted_school_id:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             detail="Error adding user to database.")
+                            detail="Error adding school to database.")
+    
+    access_token = generate_access_token({"sub": email})
+    refresh_token = generate_refresh_token({"sub": email})
 
-    session_id = str(uuid.uuid4())
-    access_token = await generate_access_token({"sub": inserted_user_id, "session_id": session_id})
-    refresh_token = await generate_refresh_token({"sub": inserted_user_id, "session_id": session_id})
     return JSONResponse(status_code=status.HTTP_201_CREATED,
                         content=TokenResponse(
-                            registered = True,
-                            access_token = access_token,
-                            refresh_token = refresh_token,
-                            token_type = "Bearer",
-                            access_expires_in = 3600,
-                            refresh_expires_in = 2592000).model_dump())
+                            access_token=access_token,
+                            refresh_token=refresh_token,
+                            token_type="Bearer",
+                            ).model_dump())

@@ -1,6 +1,9 @@
-from fastapi import FastAPI
+import os
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+import mimetypes
 
 from app.core.config import SECRET_KEY
 from app.api.endpoints.google_auth import google_router
@@ -22,3 +25,18 @@ app.add_middleware(
 )
 
 app.include_router(router=google_router, tags=['Google Auth'])
+
+
+
+@app.get("/uploads/{filename}")
+async def view_verification_document(filename: str):
+    file_path = os.path.join("schools", filename)
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    # Guess the content type (e.g., application/pdf, image/jpeg)
+    content_type, _ = mimetypes.guess_type(file_path)
+    content_type = content_type or "application/octet-stream"
+
+    return FileResponse(file_path, media_type=content_type, filename=filename)

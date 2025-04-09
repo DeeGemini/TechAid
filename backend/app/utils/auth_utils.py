@@ -150,7 +150,7 @@ def store_registration_data(user_data: dict, registration_method: str) -> str:
     else:
         return None
     redis_client.hset(registration_id, mapping=user_data)
-    redis_client.expire(registration_id, 3600)
+    redis_client.expire(registration_id, 600)
 
     return registration_id
 
@@ -159,10 +159,10 @@ def get_registration_data(registration_id: str) -> dict:
     Get user's registration data from redis.
     """
     user_data = redis_client.hgetall(registration_id)
-    modified_user_data = {}
+    decoded_user_data = {}
     for key, value in user_data.items():
         key = key.decode("utf-8")
-        modified_user_data[key] = value.decode("utf-8")
+        decoded_user_data[key] = value.decode("utf-8")
     redis_client.delete(registration_id)
-    return modified_user_data
+    return decoded_user_data
 
