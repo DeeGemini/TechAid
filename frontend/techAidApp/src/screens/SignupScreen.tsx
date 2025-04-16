@@ -51,14 +51,12 @@ const SignupScreen = () => {
       // 2. Create a new account if they don't
       // 3. Sign them in
       
-      // For demo purposes, we'll just log the data
       console.log('Signed up with Google:', {
         email: userInfo.email,
         name: userInfo.name,
         id: userInfo.id,
       });
       
-      // Navigate to the next screen after successful signup
       // router.push('/home');
     } catch (error) {
       console.error('Error signing up with Google:', error);
@@ -78,36 +76,38 @@ const SignupScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Create Account</Text>
       
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Full Name"
-          value={fullName}
-          onChangeText={setFullName}
-          autoCapitalize="words"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-        />
+      <View style={styles.formContainer}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Full Name"
+            value={fullName}
+            onChangeText={setFullName}
+            autoCapitalize="words"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+          />
+        </View>
       </View>
       
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
@@ -153,8 +153,12 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     color: '#333333',
   },
-  inputContainer: {
+  formContainer: {
     width: '100%',
+    alignItems: 'center',
+  },
+  inputContainer: {
+    width: '80%',
     marginBottom: 20,
   },
   input: {
@@ -170,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 15,
     paddingHorizontal: 40,
-    width: '100%',
+    width: '80%',
     alignItems: 'center',
   },
   buttonText: {
@@ -202,7 +206,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 12,
     paddingHorizontal: 15,
-    width: '100%',
+    width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -232,5 +236,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignupScreen;
-
-

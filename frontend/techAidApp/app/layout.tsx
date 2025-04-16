@@ -21,6 +21,20 @@ export default function RootLayout() {
           presentation: 'modal'  // or 'card' for standard navigation
         }} 
       />
+      <Stack.Screen 
+        name="dashboard" 
+        options={{ 
+          title: 'Dashboard',
+          presentation: 'modal',
+        }} 
+      />
+      <Stack.Screen 
+        name="forgot-password" 
+        options={{ 
+          title: 'Forgot Password',
+          presentation: 'modal',  // or 'card' for standard navigation
+        }} 
+      />
     </Stack>
   );
 }

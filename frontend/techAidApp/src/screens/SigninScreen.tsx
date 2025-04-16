@@ -15,7 +15,6 @@ const SigninScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Setup Google OAuth request
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: 'YOUR_EXPO_CLIENT_ID',
     iosClientId: 'YOUR_IOS_CLIENT_ID',
@@ -38,23 +37,13 @@ const SigninScreen = () => {
           headers: { Authorization: `Bearer ${authentication.accessToken}` },
         }
       );
-      
+
       const userInfo = await userInfoResponse.json();
       console.log('Google user info:', userInfo);
-      
-      // Here you would typically:
-      // 1. Verify the user exists in your database
-      // 2. Sign them in
-      // 3. Navigate to the home screen
-      
-      // For demo purposes, we'll just log the data
-      console.log('Signed in with Google:', {
-        email: userInfo.email,
-        name: userInfo.name,
-        id: userInfo.id,
-      });
-      
-      // Navigate to the next screen after successful signin
+
+      // Process user information here
+
+      // Navigate to the home screen or dashboard after successful signin
       // router.push('/home');
     } catch (error) {
       console.error('Error signing in with Google:', error);
@@ -62,12 +51,20 @@ const SigninScreen = () => {
   };
 
   const handleSignIn = () => {
-    // Add your signin logic here
+    // Add your sign-in logic here
     console.log('Sign in pressed');
+  };
+
+  const handleForgotPassword = () => {
+    router.push('/forgot-password');
   };
 
   const handleSignUp = () => {
     router.push('/signup');
+  };
+
+  const handleGoToDashboard = () => {
+    router.push('/dasnboard'); // Navigate directly to the Dashboard
   };
 
   return (
@@ -94,7 +91,7 @@ const SigninScreen = () => {
 
       <TouchableOpacity
         style={styles.forgotPasswordContainer}
-        onPress={() => router.push('/forgot-password')}
+        onPress={handleForgotPassword}
       >
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity>
@@ -124,6 +121,11 @@ const SigninScreen = () => {
           <Text style={styles.signUpLink}>Sign Up</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Additional button to navigate directly to the Dashboard */}
+      <TouchableOpacity onPress={handleGoToDashboard}>
+        <Text style={styles.dashboardLink}>Dashboard</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -226,6 +228,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#007BFF',
     fontWeight: 'bold',
+  },
+  dashboardLink: {  // New style property
+    fontSize: 16,
+    color: '#007BFF',
+    fontWeight: 'bold',
+    marginTop: 20,
   },
 });
 
