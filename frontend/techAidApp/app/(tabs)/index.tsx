@@ -20,6 +20,8 @@ import SignupScreen from '../../src/screens/SignupScreen';
 
 //AppRegistry.registerComponent('main', () => App);
 
+
+
 export default function Index() {
   return <HomeScreen />;
 }
