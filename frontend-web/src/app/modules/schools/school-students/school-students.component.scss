@@ -1,0 +1,798 @@
+@import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
+
+.students-container {
+  padding: 2rem;
+  min-height: 100vh;
+
+  .students-header {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: $primary-color;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: $gray-dark;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .filter-control {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        label {
+          font-weight: 500;
+          color: $gray-dark;
+        }
+
+        select {
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
+          border: 1px solid $gray-light;
+          background-color: white;
+          color: $gray-dark;
+          @include transition;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-light;
+            box-shadow: 0 0 0 2px rgba($primary-light, 0.2);
+          }
+        }
+      }
+
+      .view-actions {
+        display: flex;
+        gap: 0.75rem;
+
+        button {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1rem;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
+          @include transition;
+
+          fa-icon {
+            font-size: 0.9rem;
+          }
+        }
+
+        .view-toggle {
+          background-color: white;
+          border: 1px solid $gray-light;
+          color: $gray-dark;
+
+          &:hover {
+            background-color: $gray-light;
+          }
+        }
+
+        .add-button {
+          background-color: $primary-color;
+          color: white;
+          border: none;
+
+          &:hover {
+            background-color: $primary-dark;
+          }
+        }
+      }
+    }
+  }
+
+  .student-form-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: $primary-dark;
+        margin: 0;
+      }
+
+      .close-button {
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        color: $gray-dark;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-weight: 500;
+          color: $gray-dark;
+          font-size: 0.9rem;
+        }
+
+        input, select {
+          padding: 0.75rem 1rem;
+          border-radius: 6px;
+          border: 1px solid $gray-light;
+          background-color: white;
+          color: $gray-dark;
+          @include transition;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-light;
+            box-shadow: 0 0 0 2px rgba($primary-light, 0.2);
+          }
+        }
+
+        small {
+          color: #dc3545;
+          font-size: 0.8rem;
+        }
+
+        .status-options {
+          display: flex;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+
+          label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+
+            input {
+              display: none;
+
+              &:checked + .status-badge {
+                border: 2px solid currentColor;
+              }
+            }
+          }
+        }
+
+        .status-badge {
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.85rem;
+          font-weight: 600;
+
+          &.status-active {
+            background-color: rgba(#4CAF50, 0.1);
+            color: #4CAF50;
+          }
+
+          &.status-inactive {
+            background-color: rgba(#FFC107, 0.1);
+            color: #FFC107;
+          }
+
+          &.status-graduated {
+            background-color: rgba(#2196F3, 0.1);
+            color: #2196F3;
+          }
+        }
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+
+      button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        @include transition;
+      }
+
+      .cancel-button {
+        background-color: $gray-light;
+        color: $gray-dark;
+        border: none;
+
+        &:hover {
+          background-color: $gray-medium;
+        }
+      }
+
+      .submit-button {
+        background-color: $primary-color;
+        color: white;
+        border: none;
+
+        &:hover:not(:disabled) {
+          background-color: $primary-dark;
+        }
+
+        &:disabled {
+          background-color: $gray-medium;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  .students-content {
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      background-color: white;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+      fa-icon {
+        font-size: 3rem;
+        color: $primary-light;
+        margin-bottom: 1.5rem;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        color: $primary-dark;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: $gray-dark;
+        margin-bottom: 1.5rem;
+      }
+
+      .add-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+          background-color: $primary-dark;
+        }
+
+        fa-icon {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .students-list {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+
+      .list-header {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr auto;
+        padding: 1rem 1.5rem;
+        background-color: $gray-light;
+        font-weight: 600;
+        color: $gray-dark;
+        font-size: 0.9rem;
+
+        .header-cell {
+          padding: 0.5rem;
+        }
+      }
+
+      .list-body {
+        .student-row {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr auto;
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid $gray-light;
+          align-items: center;
+          @include transition;
+
+          &:hover {
+            background-color: rgba($primary-color, 0.05);
+          }
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .cell {
+            padding: 0.5rem;
+
+            .student-avatar {
+              width: 36px;
+              height: 36px;
+              border-radius: 50%;
+              background-color: rgba($primary-color, 0.1);
+              color: $primary-color;
+              @include flex-center;
+              font-weight: 600;
+              margin-right: 0.75rem;
+            }
+
+            .student-info {
+              h4 {
+                font-size: 1rem;
+                font-weight: 600;
+                color: $dark-bg;
+                margin-bottom: 0.25rem;
+              }
+
+              small {
+                font-size: 0.8rem;
+                color: $gray-dark;
+              }
+            }
+
+            .status-badge {
+              padding: 0.25rem 0.75rem;
+              border-radius: 20px;
+              font-size: 0.85rem;
+              font-weight: 600;
+
+              &.status-active {
+                background-color: rgba(#4CAF50, 0.1);
+                color: #4CAF50;
+              }
+
+              &.status-inactive {
+                background-color: rgba(#FFC107, 0.1);
+                color: #FFC107;
+              }
+
+              &.status-graduated {
+                background-color: rgba(#2196F3, 0.1);
+                color: #2196F3;
+              }
+            }
+
+            .assign-button {
+              padding: 0.5rem 0.75rem;
+              background-color: rgba($primary-color, 0.1);
+              color: $primary-color;
+              border: none;
+              border-radius: 4px;
+              font-size: 0.85rem;
+              font-weight: 500;
+              cursor: pointer;
+              @include transition;
+
+              &:hover {
+                background-color: rgba($primary-color, 0.2);
+              }
+            }
+
+            small {
+              font-size: 0.8rem;
+
+              &.condition-excellent {
+                color: #4CAF50;
+              }
+
+              &.condition-good {
+                color: #8BC34A;
+              }
+
+              &.condition-fair {
+                color: #FFC107;
+              }
+
+              &.condition-poor {
+                color: #F44336;
+              }
+            }
+
+            .edit-button {
+              background: none;
+              border: none;
+              color: $gray-dark;
+              cursor: pointer;
+              @include transition;
+
+              &:hover {
+                color: $primary-color;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .students-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+
+      .student-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        @include transition;
+
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+          display: flex;
+          align-items: center;
+          padding: 1.5rem 1.5rem 1rem;
+          position: relative;
+
+          .student-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: rgba($primary-color, 0.1);
+            color: $primary-color;
+            @include flex-center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-right: 1rem;
+          }
+
+          .student-info {
+            h4 {
+              font-size: 1.1rem;
+              font-weight: 600;
+              color: $dark-bg;
+              margin-bottom: 0.25rem;
+            }
+
+            p {
+              font-size: 0.9rem;
+              color: $gray-dark;
+              margin: 0;
+            }
+          }
+
+          .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+
+            &.status-active {
+              background-color: rgba(#4CAF50, 0.1);
+              color: #4CAF50;
+            }
+
+            &.status-inactive {
+              background-color: rgba(#FFC107, 0.1);
+              color: #FFC107;
+            }
+
+            &.status-graduated {
+              background-color: rgba(#2196F3, 0.1);
+              color: #2196F3;
+            }
+          }
+        }
+
+        .card-body {
+          padding: 0 1.5rem 1.5rem;
+
+          .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+
+            fa-icon {
+              color: $primary-color;
+              font-size: 1rem;
+              width: 20px;
+              text-align: center;
+            }
+
+            p {
+              margin: 0;
+              font-size: 0.95rem;
+            }
+
+            small {
+              font-size: 0.8rem;
+              color: $gray-dark;
+
+              &.condition-excellent {
+                color: #4CAF50;
+              }
+
+              &.condition-good {
+                color: #8BC34A;
+              }
+
+              &.condition-fair {
+                color: #FFC107;
+              }
+
+              &.condition-poor {
+                color: #F44336;
+              }
+            }
+          }
+
+          .detail-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid $gray-light;
+
+            h5 {
+              font-size: 0.9rem;
+              font-weight: 600;
+              color: $gray-dark;
+              margin-bottom: 0.75rem;
+            }
+
+            .assign-button {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              width: 100%;
+              padding: 0.5rem;
+              background-color: rgba($primary-color, 0.1);
+              color: $primary-color;
+              border: none;
+              border-radius: 4px;
+              font-size: 0.85rem;
+              font-weight: 500;
+              cursor: pointer;
+              @include transition;
+
+              &:hover {
+                background-color: rgba($primary-color, 0.2);
+              }
+
+              fa-icon {
+                font-size: 0.8rem;
+              }
+            }
+          }
+        }
+
+        .card-actions {
+          padding: 1rem 1.5rem;
+          border-top: 1px solid $gray-light;
+          display: flex;
+          justify-content: flex-end;
+
+          .edit-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: rgba($primary-color, 0.1);
+            color: $primary-color;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            @include transition;
+
+            &:hover {
+              background-color: rgba($primary-color, 0.2);
+            }
+
+            fa-icon {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark mode styles
+.dark-mode {
+  .students-container {
+    background-color: $dark-bg;
+    color: $dark-text;
+
+    .students-header {
+      h1 {
+        color: $primary-light;
+      }
+
+      .subtitle {
+        color: $gray-medium;
+      }
+
+      .controls-row {
+        .filter-control {
+          label {
+            color: $gray-medium;
+          }
+
+          select {
+            background-color: lighten($dark-bg, 5%);
+            border-color: lighten($dark-bg, 15%);
+            color: $dark-text;
+          }
+        }
+
+        .view-actions {
+          .view-toggle {
+            background-color: lighten($dark-bg, 5%);
+            border-color: lighten($dark-bg, 15%);
+            color: $dark-text;
+          }
+        }
+      }
+    }
+
+    .student-form-container {
+      background-color: lighten($dark-bg, 5%);
+
+      .form-header {
+        h3 {
+          color: $primary-light;
+        }
+      }
+
+      .form-grid {
+        .form-group {
+          label {
+            color: $gray-medium;
+          }
+
+          input, select {
+            background-color: lighten($dark-bg, 10%);
+            border-color: lighten($dark-bg, 15%);
+            color: $dark-text;
+          }
+        }
+      }
+    }
+
+    .students-content {
+      .empty-state {
+        background-color: lighten($dark-bg, 5%);
+
+        h3 {
+          color: $primary-light;
+        }
+
+        p {
+          color: $gray-medium;
+        }
+      }
+
+      .students-list {
+        background-color: lighten($dark-bg, 5%);
+
+        .list-header {
+          background-color: lighten($dark-bg, 10%);
+          color: $gray-medium;
+        }
+
+        .list-body {
+          .student-row {
+            border-bottom-color: lighten($dark-bg, 15%);
+
+            &:hover {
+              background-color: lighten($dark-bg, 10%);
+            }
+
+            .cell {
+              .student-info {
+                h4 {
+                  color: $dark-text;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .students-grid {
+        .student-card {
+          background-color: lighten($dark-bg, 5%);
+
+          .card-header {
+            .student-info {
+              h4 {
+                color: $dark-text;
+              }
+            }
+          }
+
+          .card-body {
+            .detail-section {
+              border-top-color: lighten($dark-bg, 15%);
+            }
+          }
+
+          .card-actions {
+            border-top-color: lighten($dark-bg, 15%);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+  .students-list {
+    .list-header, .student-row {
+      grid-template-columns: 2fr 1fr 1fr auto !important;
+      
+      .header-cell, .cell {
+        &:nth-child(4), &:nth-child(5) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .students-container {
+    padding: 1rem;
+  }
+
+  .students-list {
+    .list-header, .student-row {
+      grid-template-columns: 2fr auto !important;
+      
+      .header-cell, .cell {
+        &:nth-child(2), &:nth-child(3) {
+          display: none;
+        }
+      }
+    }
+  }
+}

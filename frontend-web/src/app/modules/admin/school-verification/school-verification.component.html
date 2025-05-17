@@ -1,0 +1,43 @@
+<div class="school-verification-container">
+    <h2 class="page-title">School Verification</h2>
+
+    <div *ngIf="loading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin fa-2x"></i> Loading schools...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+    <div *ngIf="schoolsAwaitingVerification && schoolsAwaitingVerification.length > 0; else noSchools">
+        <table>
+            <thead>
+                <tr>
+                    <th>School Name</th>
+                    <th>Contact Person</th>
+                    <th>Email</th>
+                    <th>Submitted On</th>
+                    <th>Verification Document</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let school of schoolsAwaitingVerification">
+                    <td>{{ school.name }}</td>
+                    <td>{{ school.contactPerson }}</td>
+                    <td>{{ school.email }}</td>
+                    <td>{{ school.registrationDate | date }}</td>
+                    <td>
+                        <button class="link-button" (click)="viewDocument(school.verificationDocumentUrl)">View</button>
+                    </td>
+                    <td>
+                        <button class="primary-button small" (click)="approveSchool(school.id)">Approve</button>
+                        <button class="secondary-button small" (click)="rejectSchool(school.id)">Reject</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noSchools>
+        <p>No schools are currently awaiting verification.</p>
+    </ng-template>
+</div>

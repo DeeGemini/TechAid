@@ -1,0 +1,225 @@
+<div class="hotspots-container">
+    <div class="hotspots-header">
+      <h1>Hotspot Access</h1>
+      <p class="subtitle">Find and connect to internet hotspots near your institution</p>
+      
+      <div class="search-controls">
+        <div class="search-bar">
+          <!-- <fa-icon [icon]="['fas', 'search']"></fa-icon> -->
+            <i class="fas fa-search"></i>
+          <input type="text" formControlName="searchQuery" placeholder="Search hotspots by name, provider or location...">
+        </div>
+        
+        <div class="view-actions">
+          <button class="filter-button" (click)="toggleFilters()">
+            <!-- <fa-icon [icon]="['fas', 'filter']"></fa-icon> -->
+            <i class="fas fa-filter"></i>
+            <span>Filters</span>
+          </button>
+          
+          <button class="view-toggle" (click)="toggleViewMode()">
+            <!-- <fa-icon [icon]="['fas', viewMode === 'list' ? 'map' : 'list']"></fa-icon> -->
+            <i class="fas" [ngClass]="viewMode === 'list' ? 'fa-map' : 'fa-list'"></i>
+            <span>{{viewMode === 'list' ? 'Map View' : 'List View'}}</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="filter-panel" *ngIf="showFilters">
+        <div class="filter-group">
+          <label>Connection Speed</label>
+          <select formControlName="speed">
+            <option *ngFor="let option of speedOptions" [value]="option.value">{{option.label}}</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Cost</label>
+          <select formControlName="cost">
+            <option *ngFor="let option of costOptions" [value]="option.value">{{option.label}}</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Status</label>
+          <select formControlName="status">
+            <option *ngFor="let option of statusOptions" [value]="option.value">{{option.label}}</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Max Distance: {{searchForm.get('maxDistance')?.value}} km</label>
+          <input type="range" formControlName="maxDistance" min="0.5" max="20" step="0.5">
+        </div>
+      </div>
+    </div>
+  
+    <div class="hotspots-content">
+      <div class="hotspots-list" *ngIf="viewMode === 'list'">
+        <div *ngIf="filteredHotspots.length === 0" class="empty-state">
+          <!-- <fa-icon [icon]="['fas', 'wifi']"></fa-icon> -->
+            <i class="fas fa-wifi"></i>
+          <h3>No hotspots found</h3>
+          <p>Try adjusting your search filters or zooming out on the map</p>
+          <button class="reset-button" (click)="searchForm.reset()">
+            Reset Filters
+          </button>
+        </div>
+  
+        <div class="hotspot-card" *ngFor="let hotspot of filteredHotspots" (click)="selectHotspot(hotspot)">
+          <div class="hotspot-icon" [class]="getCostClass(hotspot.cost)">
+            <!-- <fa-icon [icon]="['fas', getHotspotIcon(hotspot)]"></fa-icon> -->
+            <i class="fas" [ngClass]="'fa-' + getHotspotIcon(hotspot)"></i>
+          </div>
+          
+          <div class="hotspot-info">
+            <h3>{{hotspot.name}}</h3>
+            <p class="provider">{{hotspot.provider}}</p>
+            
+            <div class="hotspot-meta">
+              <span class="distance">{{hotspot.distance}} km away</span>
+              <span class="speed" [class]="getSpeedClass(hotspot.speed)">
+                {{hotspot.speed | titlecase}} speed
+              </span>
+              <span class="cost" [class]="getCostClass(hotspot.cost)">
+                {{hotspot.cost === 'free' ? 'Free' : 'KES ' + hotspot.price + '/day'}}
+              </span>
+            </div>
+            
+            <div class="hotspot-footer">
+              <span class="availability">
+                <!-- <fa-icon [icon]="['fas', 'clock']"></fa-icon> -->
+                <i class="fas fa-clock"></i>
+                {{hotspot.availability === '24/7' ? 'Always available' : 'Available ' + hotspot.availability}}
+                {{hotspot.availability}}
+              </span>
+              <span class="status" [class]="getStatusClass(hotspot.status)">
+                {{hotspot.status | titlecase}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="hotspots-map" *ngIf="viewMode === 'map'">
+        <!-- Map placeholder - in a real app you would integrate with Google Maps or similar -->
+        <div class="map-container">
+          <div class="map-placeholder">
+            <!-- <fa-icon [icon]="['fas', 'map']"></fa-icon> -->
+            <i class="fas fa-map"></i>
+            <p>Interactive map would display here</p>
+          </div>
+          
+          <div class="map-legend">
+            <div class="legend-item">
+              <span class="legend-icon cost-free"></span>
+              <span>Free hotspot</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-icon cost-paid"></span>
+              <span>Paid hotspot</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="hotspot-details" *ngIf="selectedHotspot">
+      <div class="details-header">
+        <h2>{{selectedHotspot.name}}</h2>
+        <button class="close-button" (click)="closeDetails()">
+          <!-- <fa-icon [icon]="['fas', 'times']"></fa-icon> -->
+            <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="details-content">
+        <div class="detail-row">
+          <!-- <fa-icon [icon]="['fas', 'building']"></fa-icon> -->
+            <i class="fas fa-building"></i>
+          <div>
+            <h4>Provider</h4>
+            <p>{{selectedHotspot.provider}}</p>
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <!-- <fa-icon [icon]="['fas', 'map-marker-alt']"></fa-icon> -->
+            <i class="fas fa-map-marker-alt"></i>
+          <div>
+            <h4>Location</h4>
+            <p>{{selectedHotspot.location.address}}</p>
+            <small>{{selectedHotspot.distance}} km from your institution</small>
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <!-- <fa-icon [icon]="['fas', 'clock']"></fa-icon> -->
+            <i class="fas fa-clock"></i>
+          <div>
+            <h4>Availability</h4>
+            <p>{{selectedHotspot.availability}}</p>
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <!-- <fa-icon [icon]="['fas', 'tachometer-alt']"></fa-icon> -->
+            <i class="fas fa-tachometer-alt"></i>
+          <div>
+            <h4>Connection Speed</h4>
+            <p>
+              <span [class]="getSpeedClass(selectedHotspot.speed)">
+                {{selectedHotspot.speed | titlecase}}
+              </span>
+            </p>
+          </div>
+        </div>
+        
+        <div class="detail-row">
+          <!-- <fa-icon [icon]="['fas', 'money-bill-wave']"></fa-icon> -->
+            <i class="fas fa-money-bill-wave"></i>
+          <div>
+            <h4>Cost</h4>
+            <p [class]="getCostClass(selectedHotspot.cost)">
+              {{selectedHotspot.cost === 'free' ? 'Free access' : 'KES ' + selectedHotspot.price + ' per day'}}
+            </p>
+          </div>
+        </div>
+        
+        <div class="detail-row" *ngIf="selectedHotspot.status !== 'available'">
+          <!-- <fa-icon [icon]="['fas', 'info-circle']"></fa-icon> -->
+            <i class="fas fa-info-circle"></i>
+          <div>
+            <h4>Request Status</h4>
+            <p [class]="getStatusClass(selectedHotspot.status)">
+              {{selectedHotspot.status | titlecase}}
+              <span *ngIf="selectedHotspot.requestedDate">
+                on {{selectedHotspot.requestedDate | date:'mediumDate'}}
+              </span>
+            </p>
+            <small *ngIf="selectedHotspot.approvedDate && selectedHotspot.status === 'approved'">
+              Approved on {{selectedHotspot.approvedDate | date:'mediumDate'}}
+            </small>
+          </div>
+        </div>
+      </div>
+      
+      <div class="details-actions">
+        <button class="secondary-button" (click)="closeDetails()">
+          Back to List
+        </button>
+        
+        <button class="primary-button" 
+                *ngIf="selectedHotspot.status === 'available'"
+                (click)="requestAccess(selectedHotspot)">
+          Request Access
+        </button>
+        
+        <button class="disabled-button" 
+                *ngIf="selectedHotspot.status !== 'available'"
+                disabled>
+          {{selectedHotspot.status | titlecase}}
+        </button>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,20 @@
+<div class="user-dashboard-container">
+    <h2 class="page-title">User Dashboard</h2>
+
+    <div class="dashboard-overview">
+        <div class="overview-card" routerLink="/profile/donations">
+            <h3>Donation History</h3>
+            <p>View your past contributions.</p>
+        </div>
+
+        <div class="overview-card" *ngIf="isHotspotProvider" routerLink="/profile/hubs">
+            <h3>Manage My Hubs</h3>
+            <p>View and manage your listed hubs/hotspots.</p>
+        </div>
+
+        <div class="overview-card" routerLink="/profile/edit">
+            <h3>Edit Profile</h3>
+            <p>Update your personal information.</p>
+        </div>
+    </div>
+</div>

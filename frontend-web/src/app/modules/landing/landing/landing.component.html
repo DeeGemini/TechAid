@@ -1,0 +1,139 @@
+<div class="landing-container">
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="logo-icon">
+        <i class="fas fa-laptop-code"></i>
+      </span>
+      <span class="logo-text">TechAid</span>
+    </div>
+    <div class="navbar-actions">
+      <button class="nav-button" routerLink="/login">Log In</button>
+      <button class="nav-button primary" routerLink="/register">Register</button>
+      <button class="theme-toggle" (click)="toggleTheme()">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Bridging the Digital Divide in African Education</h1>
+      <p class="hero-subtitle">Join us in empowering students through device donations and internet access</p>
+      <div class="hero-cta">
+        <button class="cta-button primary" routerLink="/register">Get Started</button>
+        <button class="cta-button secondary" routerLink="/hubs">Find Nearby Hubs</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <i class="fas fa-laptop"></i>
+          <span class="stat-number">1,250+</span>
+          <span class="stat-label">Devices Donated</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-wifi"></i>
+          <span class="stat-number">480+</span>
+          <span class="stat-label">Hotspots Available</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-graduation-cap"></i>
+          <span class="stat-number">75+</span>
+          <span class="stat-label">Schools Supported</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="assets/images/hero.jpg" alt="Students using digital devices">
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works">
+    <h2 class="section-title">How TechAid Works</h2>
+    <div class="steps-container">
+      <div class="step">
+        <div class="step-number">1</div>
+        <i class="fas fa-hand-holding-heart step-icon"></i>
+        <h3 class="step-title">Donate or Offer</h3>
+        <p class="step-description">Contribute devices or share your internet connection as a hotspot</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <i class="fas fa-school step-icon"></i>
+        <h3 class="step-title">Schools Register</h3>
+        <p class="step-description">Educational institutions request support for their students</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <i class="fas fa-exchange-alt step-icon"></i>
+        <h3 class="step-title">We Connect</h3>
+        <p class="step-description">TechAid matches donations with schools in need</p>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <i class="fas fa-chart-line step-icon"></i>
+        <h3 class="step-title">Track Impact</h3>
+        <p class="step-description">See how your contribution makes a difference</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2 class="cta-title">Ready to Make an Impact?</h2>
+      <p class="cta-text">Join our growing community of donors and supporters today</p>
+      <div class="cta-buttons">
+        <button class="cta-button primary" routerLink="/register">Join Now</button>
+        <button class="cta-button outline" routerLink="/about">Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="logo-container">
+          <i class="fas fa-laptop-code logo-icon"></i>
+          <span class="logo-text">TechAid</span>
+        </div>
+        <p class="footer-mission">Digitizing education in Africa through community support</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="link-group">
+          <h4 class="link-group-title">For Donors</h4>
+          <a routerLink="/donate" class="footer-link">Donate Devices</a>
+          <a routerLink="/offer-hotspot" class="footer-link">Offer Hotspot</a>
+          <a routerLink="/impact" class="footer-link">See Impact</a>
+        </div>
+        <div class="link-group">
+          <h4 class="link-group-title">For Schools</h4>
+          <a routerLink="/schools/register" class="footer-link">Register School</a>
+          <a routerLink="/schools/request" class="footer-link">Request Support</a>
+          <a routerLink="/resources" class="footer-link">Educational Resources</a>
+        </div>
+        <div class="link-group">
+          <h4 class="link-group-title">Company</h4>
+          <a routerLink="/about" class="footer-link">About Us</a>
+          <a routerLink="/contact" class="footer-link">Contact</a>
+          <a routerLink="/faq" class="footer-link">FAQ</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {{ year }} TechAid. All rights reserved.</p>
+      <div class="legal-links">
+        <a routerLink="/privacy">Privacy Policy</a>
+        <a routerLink="/terms">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+</div>

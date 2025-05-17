@@ -1,0 +1,307 @@
+@import '../../../../assets/styles/variables'; // Assuming you have a variables file
+@import '../../../../assets/styles/mixins'; // Assuming you have a mixins file
+
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: $light-bg;
+  @include transition(background-color, 0.5s);
+
+  &.dark-mode {
+    background-color: $dark-bg;
+    color: $dark-text;
+
+    .login-card {
+      background-color: lighten($dark-bg, 5%);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-group input {
+      background-color: lighten($dark-bg, 10%);
+      color: $dark-text;
+      border-color: lighten($dark-bg, 20%);
+    }
+
+    .login-footer p, .email-sent-message p {
+      color: rgba($dark-text, 0.7);
+    }
+  }
+}
+
+.login-card {
+  flex: 1;
+  max-width: 500px;
+  padding: 3rem 2rem;
+  background-color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @include transition;
+
+  .login-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+
+      .logo-icon {
+        color: $primary-color;
+        font-size: 1.75rem;
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $primary-dark;
+      }
+    }
+
+    .login-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: $primary-dark;
+    }
+
+    .login-subtitle {
+      color: $gray-medium;
+      font-size: 1rem;
+    }
+  }
+
+  .login-form {
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: $primary-dark;
+      }
+
+      input {
+        width: 88%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid $gray-light;
+        border-radius: 8px;
+        font-size: 1rem;
+        @include transition;
+
+        &:focus {
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+          outline: none;
+        }
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(25%);
+        color: $gray-medium;
+      }
+    }
+
+    .error-message {
+      color: #e74c3c;
+      background-color: rgba(#e74c3c, 0.1);
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      @include transition;
+
+      &.primary {
+        background-color: $primary-color;
+        color: white;
+        border: none;
+
+        &:hover:not(:disabled) {
+          background-color: $primary-dark;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+        }
+      }
+
+      &.google {
+        background-color: white;
+        color: #5f6368;
+        border: 1px solid #dadce0;
+
+        &:hover:not(:disabled) {
+          background-color: #f8f9fa;
+          transform: translateY(-2px);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: $gray-medium;
+
+      &::before, &::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid $gray-light;
+      }
+
+      span {
+        padding: 0 1rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+
+    p {
+      color: $gray-medium;
+      font-size: 0.9rem;
+
+      a {
+        color: $primary-color;
+        font-weight: 600;
+        text-decoration: none;
+        @include transition;
+
+        &:hover {
+          color: $primary-dark;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .email-sent-message {
+    text-align: center;
+    padding: 1rem;
+
+    .success-icon {
+      font-size: 3rem;
+      color: $primary-color;
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: $primary-dark;
+    }
+
+    p {
+      color: $gray-medium;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+
+      strong {
+        color: $primary-dark;
+      }
+
+      a {
+        color: $primary-color;
+        font-weight: 600;
+        text-decoration: none;
+        @include transition;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      color: $primary-color;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      @include transition;
+
+      &:hover {
+        color: $primary-dark;
+      }
+    }
+  }
+}
+
+.login-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba($primary-light, 0.1) 0%, rgba($primary-light, 0.05) 100%);
+
+  img {
+    max-width: 100%;
+    height: auto;
+    max-height: 80vh;
+  }
+}
+
+// Responsive Design
+@media (max-width: 992px) {
+  .login-container {
+    flex-direction: column;
+
+    .login-card {
+      max-width: 100%;
+      padding: 2rem 1.5rem;
+    }
+
+    .login-image {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .login-card {
+    padding: 1.5rem 1rem;
+  }
+}

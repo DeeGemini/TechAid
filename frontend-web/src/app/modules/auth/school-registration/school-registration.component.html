@@ -1,0 +1,375 @@
+<div class="registration-container">
+    <div class="registration-header">
+        <div class="logo-container">
+            <i class="fas fa-laptop-code logo-icon"></i>
+            <span class="logo-text">TechAid</span>
+        </div>
+        <h1>School Registration</h1>
+        <p>Register your educational institution to receive digital support</p>
+    </div>
+
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+        <!-- Basic Information Section -->
+        <fieldset class="form-section">
+            <legend>
+                <i class="fas fa-info-circle"></i> Basic Information
+            </legend>
+
+            <div class="form-group"
+                [class.invalid]="basicInfo['institutionName'].invalid && basicInfo['institutionName'].touched">
+                <label for="institutionName">Institution Name *</label>
+                <input type="text" id="institutionName" formControlName="institutionName"
+                    placeholder="Official name of your institution">
+                <div class="error-message"
+                    *ngIf="basicInfo['institutionName'].errors?.['required'] && basicInfo['institutionName'].touched">
+                    Institution name is required
+                </div>
+                <div class="error-message"
+                    *ngIf="basicInfo['institutionName'].errors?.['minlength'] && basicInfo['institutionName'].touched">
+                    Name must be at least 3 characters
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"
+                    [class.invalid]="basicInfo['institutionType'].invalid && basicInfo['institutionType'].touched">
+                    <label for="institutionType">Institution Type *</label>
+                    <select id="institutionType" formControlName="institutionType">
+                        <option value="" disabled selected>Select type</option>
+                        <option *ngFor="let type of schoolTypes" [value]="type">{{ type }}</option>
+                    </select>
+                    <div class="error-message"
+                        *ngIf="basicInfo['institutionType'].errors?.['required'] && basicInfo['institutionType'].touched">
+                        Please select your institution type
+                    </div>
+                </div>
+
+                <div class="form-group" [class.invalid]="basicInfo['email'].invalid && basicInfo['email'].touched">
+                    <label for="email">Institution Email *</label>
+                    <input type="email" id="email" formControlName="email" placeholder="official@institution.edu">
+                    <div class="error-message"
+                        *ngIf="basicInfo['email'].errors?.['required'] && basicInfo['email'].touched">
+                        Email is required
+                    </div>
+                    <div class="error-message"
+                        *ngIf="basicInfo['email'].errors?.['email'] && basicInfo['email'].touched">
+                        Please enter a valid email
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"
+                    [class.invalid]="basicInfo['phoneNumber'].invalid && basicInfo['phoneNumber'].touched">
+                    <label for="phoneNumber">Phone Number *</label>
+                    <input type="tel" id="phoneNumber" formControlName="phoneNumber" placeholder="+1234567890">
+                    <div class="error-message"
+                        *ngIf="basicInfo['phoneNumber'].errors?.['required'] && basicInfo['phoneNumber'].touched">
+                        Phone number is required
+                    </div>
+                    <div class="error-message"
+                        *ngIf="basicInfo['phoneNumber'].errors?.['pattern'] && basicInfo['phoneNumber'].touched">
+                        Please enter a valid phone number
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="alternativeContact">Alternative Contact</label>
+                    <input type="tel" id="alternativeContact" formControlName="alternativeContact"
+                        placeholder="Optional additional number">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="website">Website</label>
+                <input type="url" id="website" formControlName="website" placeholder="https://yourinstitution.edu">
+                <div class="error-message"
+                    *ngIf="basicInfo['website'].errors?.['pattern'] && basicInfo['website'].touched">
+                    Please enter a valid URL
+                </div>
+            </div>
+
+            <div class="form-group"
+                [class.invalid]="basicInfo['description'].invalid && basicInfo['description'].touched">
+                <label for="description">Institution Description *</label>
+                <textarea id="description" formControlName="description"
+                    placeholder="Brief description of your institution (20-500 characters)" rows="4"></textarea>
+                <div class="character-count">
+                    {{ basicInfo['description'].value?.length || 0 }}/500
+                </div>
+                <div class="error-message"
+                    *ngIf="basicInfo['description'].errors?.['required'] && basicInfo['description'].touched">
+                    Description is required
+                </div>
+                <div class="error-message"
+                    *ngIf="basicInfo['description'].errors?.['minlength'] && basicInfo['description'].touched">
+                    Description must be at least 20 characters
+                </div>
+                <div class="error-message"
+                    *ngIf="basicInfo['description'].errors?.['maxlength'] && basicInfo['description'].touched">
+                    Description cannot exceed 500 characters
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Location Information Section -->
+        <fieldset class="form-section">
+            <legend>
+                <i class="fas fa-map-marker-alt"></i> Location Information
+            </legend>
+
+            <div class="form-row">
+                <div class="form-group"
+                    [class.invalid]="locationInfo['country'].invalid && locationInfo['country'].touched">
+                    <label for="country">Country *</label>
+                    <select id="country" formControlName="country">
+                        <option value="" disabled selected>Select country</option>
+                        <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+                    </select>
+                    <div class="error-message"
+                        *ngIf="locationInfo['country'].errors?.['required'] && locationInfo['country'].touched">
+                        Country is required
+                    </div>
+                </div>
+
+                <div class="form-group"
+                    [class.invalid]="locationInfo['region'].invalid && locationInfo['region'].touched">
+                    <label for="region">Region/State *</label>
+                    <input type="text" id="region" formControlName="region" placeholder="Region, state or province">
+                    <div class="error-message"
+                        *ngIf="locationInfo['region'].errors?.['required'] && locationInfo['region'].touched">
+                        Region is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" [class.invalid]="locationInfo['city'].invalid && locationInfo['city'].touched">
+                    <label for="city">City/Town *</label>
+                    <input type="text" id="city" formControlName="city" placeholder="City or town">
+                    <div class="error-message"
+                        *ngIf="locationInfo['city'].errors?.['required'] && locationInfo['city'].touched">
+                        City is required
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="isRemote" formControlName="isRemote">
+                        <label for="isRemote">We are a remote/online institution</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group"
+                [class.invalid]="locationInfo['streetAddress'].invalid && locationInfo['streetAddress'].touched"
+                *ngIf="!isRemoteInstitution">
+                <label for="streetAddress">Street Address *</label>
+                <input type="text" id="streetAddress" formControlName="streetAddress"
+                    placeholder="Physical address of the institution">
+                <div class="error-message"
+                    *ngIf="locationInfo['streetAddress'].errors?.['required'] && locationInfo['streetAddress'].touched">
+                    Street address is required
+                </div>
+            </div>
+
+            <div class="form-group" *ngIf="isRemoteInstitution">
+                <label for="coordinates">Map Coordinates (Optional)</label>
+                <div class="coordinates-input">
+                    <input type="text" id="coordinates" formControlName="coordinates"
+                        placeholder="e.g., 9.0820° N, 8.6753° E" pattern="-?\d{1,3}\.\d+,-?\d{1,3}\.\d+">
+                    <button type="button" class="map-picker-button" (click)="toggleMapPicker()">
+                        <i class="fas fa-map-marked-alt"></i> Pick from Map
+                    </button>
+                </div>
+                <div class="help-text">
+                    If your institution serves a specific geographic area, you can provide coordinates
+                </div>
+                <div class="error-message"
+                    *ngIf="locationInfo['coordinates'].errors?.['pattern'] && locationInfo['coordinates'].touched">
+                    Please enter valid coordinates (latitude,longitude)
+                </div>
+            </div>
+
+            <div class="map-picker-container" *ngIf="showMapPicker">
+                <div class="map-picker-header">
+                    <h3>Select Location on Map</h3>
+                    <button type="button" class="close-button" (click)="toggleMapPicker()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <!-- In a real app, you would integrate with Google Maps or similar -->
+                <div class="map-placeholder">
+                    <i class="fas fa-map fa-3x"></i>
+                    <p>Map integration would appear here</p>
+                    <button type="button" class="primary-button" (click)="onCoordinatesSelected('9.0820,8.6753')">
+                        Use Sample Coordinates
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Admin Contact Section -->
+        <fieldset class="form-section">
+            <legend>
+                <i class="fas fa-user-tie"></i> Administrative Contact
+            </legend>
+
+            <div class="form-row">
+                <div class="form-group"
+                    [class.invalid]="adminInfo['contactPerson'].invalid && adminInfo['contactPerson'].touched">
+                    <label for="contactPerson">Contact Person *</label>
+                    <input type="text" id="contactPerson" formControlName="contactPerson"
+                        placeholder="Full name of primary contact">
+                    <div class="error-message"
+                        *ngIf="adminInfo['contactPerson'].errors?.['required'] && adminInfo['contactPerson'].touched">
+                        Contact person is required
+                    </div>
+                </div>
+
+                <div class="form-group"
+                    [class.invalid]="adminInfo['contactPosition'].invalid && adminInfo['contactPosition'].touched">
+                    <label for="contactPosition">Position/Role *</label>
+                    <input type="text" id="contactPosition" formControlName="contactPosition"
+                        placeholder="e.g., Principal, Director">
+                    <div class="error-message"
+                        *ngIf="adminInfo['contactPosition'].errors?.['required'] && adminInfo['contactPosition'].touched">
+                        Position is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"
+                    [class.invalid]="adminInfo['contactEmail'].invalid && adminInfo['contactEmail'].touched">
+                    <label for="contactEmail">Contact Email *</label>
+                    <input type="email" id="contactEmail" formControlName="contactEmail"
+                        placeholder="contact@institution.edu">
+                    <div class="error-message"
+                        *ngIf="adminInfo['contactEmail'].errors?.['required'] && adminInfo['contactEmail'].touched">
+                        Email is required
+                    </div>
+                    <div class="error-message"
+                        *ngIf="adminInfo['contactEmail'].errors?.['email'] && adminInfo['contactEmail'].touched">
+                        Please enter a valid email
+                    </div>
+                </div>
+
+                <div class="form-group"
+                    [class.invalid]="adminInfo['contactPhone'].invalid && adminInfo['contactPhone'].touched">
+                    <label for="contactPhone">Contact Phone *</label>
+                    <input type="tel" id="contactPhone" formControlName="contactPhone" placeholder="+1234567890">
+                    <div class="error-message"
+                        *ngIf="adminInfo['contactPhone'].errors?.['required'] && adminInfo['contactPhone'].touched">
+                        Phone number is required
+                    </div>
+                    <div class="error-message"
+                        *ngIf="adminInfo['contactPhone'].errors?.['pattern'] && adminInfo['contactPhone'].touched">
+                        Please enter a valid phone number
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Verification Documents Section -->
+        <fieldset class="form-section">
+            <legend>
+                <i class="fas fa-file-alt"></i> Verification Documents
+            </legend>
+            <p class="section-description">
+                To verify your institution, please provide the following documents.
+                This helps us prevent fraud and ensure resources go to legitimate institutions.
+            </p>
+
+            <div class="form-group">
+                <label for="registrationNumber">Registration/License Number</label>
+                <input type="text" id="registrationNumber" formControlName="registrationNumber"
+                    placeholder="Official registration number if available">
+            </div>
+
+            <div class="document-upload-group">
+                <label>Accreditation Document *</label>
+                <p class="help-text">
+                    Upload a scanned copy of your institution's accreditation, license, or registration certificate
+                </p>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="accreditationDocument"
+                        (change)="onFileSelected($event, 'accreditationDocument')" accept=".pdf,.jpg,.jpeg,.png">
+                    <label for="accreditationDocument" class="file-upload-button">
+                        <i class="fas fa-upload"></i> Choose File
+                    </label>
+                    <span class="file-name">
+                        {{ registrationForm.get('verificationInfo.accreditationDocument')?.value?.name || 'No filechosen' }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="document-upload-group" *ngIf="!isRemoteInstitution">
+                <label>Proof of Address *</label>
+                <p class="help-text">
+                    Upload a document that verifies your institution's physical address (utility bill, lease agreement,
+                    etc.)
+                </p>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="proofOfAddress" (change)="onFileSelected($event, 'proofOfAddress')"
+                        accept=".pdf,.jpg,.jpeg,.png">
+                    <label for="proofOfAddress" class="file-upload-button">
+                        <i class="fas fa-upload"></i> Choose File
+                    </label>
+                    <span class="file-name">
+                        {{ registrationForm.get('verificationInfo.proofOfAddress')?.value?.name || 'No file chosen' }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="document-upload-group">
+                <label>Additional Documents</label>
+                <p class="help-text">
+                    Any other documents that can help verify your institution (optional)
+                </p>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="additionalDocuments" (change)="onFileSelected($event, 'additionalDocuments')"
+                        accept=".pdf,.jpg,.jpeg,.png">
+                    <label for="additionalDocuments" class="file-upload-button">
+                        <i class="fas fa-upload"></i> Choose File
+                    </label>
+                    <span class="file-name">
+                        {{ registrationForm.get('verificationInfo.additionalDocuments')?.value?.name || 'No file chosen'
+                        }}
+                    </span>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Terms and Submit -->
+        <div class="form-group terms-group"
+            [class.invalid]="registrationForm.get('termsAccepted')?.invalid && registrationForm.get('termsAccepted')?.touched">
+            <div class="checkbox-group">
+                <input type="checkbox" id="termsAccepted" formControlName="termsAccepted">
+                <label for="termsAccepted">
+                    I certify that all information provided is accurate and I agree to the
+                    <a href="#" target="_blank">Terms of Service</a> and
+                    <a href="#" target="_blank">Privacy Policy</a> *
+                </label>
+            </div>
+            <div class="error-message"
+                *ngIf="registrationForm.get('termsAccepted')?.errors?.['required'] && registrationForm.get('termsAccepted')?.touched">
+                You must accept the terms to continue
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="submit-button" [disabled]="isSubmitting || registrationForm.invalid">
+                <span *ngIf="!isSubmitting">Submit Registration</span>
+                <span *ngIf="isSubmitting">
+                    <i class="fas fa-spinner fa-spin"></i> Processing...
+                </span>
+            </button>
+            <p class="form-note">
+                * After submission, our team will review your application. You'll receive an email once your account is
+                approved.
+                This process typically takes 2-3 business days.
+            </p>
+        </div>
+    </form>
+</div>

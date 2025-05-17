@@ -1,0 +1,52 @@
+$primary-color: #8a4fff;
+$primary-light: #b388ff;
+$primary-dark: #5c2dba;
+$secondary-color: #ff8a4f;
+$dark-bg: #1a1a2e;
+$dark-text: #f8f9fa;
+$light-bg: #f8f9fa;
+$light-text: #212529;
+$gray-light: #e9ecef;
+$gray-medium: #adb5bd;
+$gray-dark: #495057;
+
+// Primary Lilac Colors
+$primary-medium: #c8a2c8;
+
+// Accent Colors (consider complementary shades)
+$accent-light: #f0f8ff; // Alice Blue
+$accent-medium: #add8e6; // Light Blue
+$accent-dark: #87ceeb; // Sky Blue
+
+// Neutral Colors
+$neutral-lightest: #f9f9f9;
+$neutral-light: #e0e0e0;
+$neutral-medium: #9e9e9e;
+$neutral-dark: #424242;
+$neutral-darkest: #212121;
+
+// Text Colors
+$text-primary: $neutral-darkest;
+$text-secondary: $neutral-medium;
+$text-link: $primary-dark;
+
+// Spacing
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// Transitions
+$transition-fast: all 0.2s ease-in-out;
+$transition-medium: all 0.3s ease-in-out;
+
+// Error Colors
+$danger-dark: #b00020;
+$danger-medium: #d32f2f;
+$danger-light: #f44336;

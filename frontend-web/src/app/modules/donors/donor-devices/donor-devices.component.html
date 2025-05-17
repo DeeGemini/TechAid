@@ -1,0 +1,103 @@
+<div class="devices-page">
+    <div class="page-header">
+        <h1>Device Donations</h1>
+        <p>View your past device donations and their impact</p>
+        <button routerLink="/donors/devices/new" class="btn-primary">
+            <i class="fas fa-plus"></i> Donate New Device
+        </button>
+    </div>
+
+    <div class="donations-list">
+        <div class="donation-card" *ngFor="let donation of donations" [class.expanded]="expandedDonation === donation.id">
+            <div class="donation-header" (click)="toggleDonationDetails(donation.id)">
+                <div class="donation-id">
+                    <span class="badge" [style.backgroundColor]="getStatusColor(donation.status)">{{ donation.status }}</span>
+                    <strong>{{ donation.id }}</strong>
+                </div>
+                <div class="donation-school">
+                    <i class="fas fa-school"></i>
+                    {{ donation.school.name }} ({{ donation.school.location }})
+                </div>
+                <div class="donation-date">
+                    <i class="fas fa-calendar-alt"></i>
+                    {{ donation.date | date:'mediumDate' }}
+                </div>
+                <div class="donation-total">
+                    <i class="fas fa-laptop"></i>
+                    {{ getTotalDevices(donation.devices) }} device(s)
+                </div>
+                <div class="donation-toggle">
+                    <i class="fas" [class.fa-chevron-down]="expandedDonation !== donation.id" 
+                        [class.fa-chevron-up]="expandedDonation === donation.id"></i>
+                </div>
+            </div>
+
+            <div class="donation-details" *ngIf="expandedDonation === donation.id">
+                <div class="devices-section">
+                    <h3>Devices Donated</h3>
+                    <div class="devices-grid">
+                        <div class="device-item" *ngFor="let device of donation.devices">
+                            <div class="device-type">
+                                <i class="fas fa-laptop" *ngIf="device.type === 'Laptop'"></i>
+                                <i class="fas fa-tablet-alt" *ngIf="device.type === 'Tablet'"></i>
+                                <i class="fas fa-mobile-alt" *ngIf="device.type === 'Smartphone'"></i>
+                                {{ device.type }}
+                            </div>
+                            <div class="device-quantity">{{ device.quantity }}</div>
+                            <div class="device-condition">{{ device.condition }}</div>
+                            <div class="device-specs">{{ device.specifications }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="delivery-section">
+                    <h3>Delivery Information</h3>
+                    <div class="delivery-info">
+                        <div class="info-item">
+                            <label>Tracking Number:</label>
+                            <span>{{ donation.trackingNumber }}</span>
+                        </div>
+                        <div class="info-item" *ngIf="donation.deliveryDate">
+                            <label>Delivery Date:</label>
+                            <span>{{ donation.deliveryDate | date:'mediumDate' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Status:</label>
+                            <span [style.color]="getStatusColor(donation.status)">{{ donation.status }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="impact-section">
+                    <h3>Your Impact</h3>
+                    <div class="impact-message">
+                        <i class="fas fa-quote-left"></i>
+                        <p>Your donation is helping {{ getTotalDevices(donation.devices) }} students at {{ donation.school.name }} 
+                        access digital education resources they wouldn't otherwise have.</p>
+                        <div class="impact-stats">
+                            <div class="stat">
+                                <i class="fas fa-users"></i>
+                                <span>~50 students impacted per device</span>
+                            </div>
+                            <div class="stat">
+                                <i class="fas fa-book"></i>
+                                <span>Access to 100+ digital books</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="empty-state" *ngIf="donations.length === 0">
+        <div class="empty-content">
+            <i class="fas fa-laptop"></i>
+            <h3>No Device Donations Yet</h3>
+            <p>You haven't donated any devices yet. Start making an impact by donating your first device.</p>
+            <button routerLink="/donor/devices/new" class="btn-primary">
+                <i class="fas fa-plus"></i> Donate a Device
+            </button>
+        </div>
+    </div>
+</div>

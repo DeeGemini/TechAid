@@ -1,0 +1,46 @@
+<div class="manage-hubs-container">
+    <h2 class="page-title">Manage My Hubs/Hotspots</h2>
+
+    <div *ngIf="loading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin fa-2x"></i> Loading your hubs...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+    <div *ngIf="hubs && hubs.length > 0; else noHubs">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let hub of hubs">
+                    <td>{{ hub.id }}</td>
+                    <td>{{ hub.name || 'N/A' }}</td>
+                    <td>{{ hub.location }}</td>
+                    <td>{{ hub.type }}</td>
+                    <td>{{ hub.isActive ? 'Active' : 'Inactive' }}</td>
+                    <td>
+                        <button class="link-button" (click)="viewHubDetails(hub.id)">View Details</button>
+                        <button class="secondary-button small" (click)="toggleHubStatus(hub.id, hub.isActive)">
+                            {{ hub.isActive ? 'Deactivate' : 'Activate' }}
+                        </button>
+                        <button class="danger-button small" (click)="deleteHub(hub.id)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noHubs>
+        <p>You haven't listed any hubs/hotspots yet.</p>
+    </ng-template>
+
+    <button class="primary-button" routerLink="/hubs/add">List a New Hub/Hotspot</button>
+</div>

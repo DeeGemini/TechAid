@@ -1,0 +1,162 @@
+<div class="hubs-container" [ngClass]="{'dark-mode': isDarkMode}">
+    <div class="hubs-header">
+      <div class="header-content">
+        <h1>Education Hubs & Hotspots</h1>
+        <p>Find device donation centers and internet hotspots near you</p>
+      </div>
+    </div>
+  
+    <div class="filters-container">
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Search for hubs..." 
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          aria-label="Search hubs"
+        >
+        <i class="fas fa-search"></i>
+      </div>
+  
+      <div class="filter-options">
+        <div class="filter-group">
+          <label for="locationFilter">Location</label>
+          <select 
+            id="locationFilter" 
+            [(ngModel)]="selectedLocation" 
+            (change)="onLocationChange()"
+            aria-label="Filter by location"
+          >
+            <option *ngFor="let location of locations" [value]="location.id">{{location.name}}</option>
+          </select>
+        </div>
+  
+        <div class="filter-group">
+          <label for="typeFilter">Type</label>
+          <select 
+            id="typeFilter" 
+            [(ngModel)]="selectedType" 
+            (change)="onTypeChange()"
+            aria-label="Filter by type"
+          >
+            <option *ngFor="let type of hubTypes" [value]="type.id">{{type.name}}</option>
+          </select>
+        </div>
+      </div>
+  
+      <div class="custom-location">
+        <input 
+          type="text" 
+          placeholder="Enter a custom location..." 
+          [(ngModel)]="locationSearchInput"
+          aria-label="Enter custom location"
+        >
+        <button (click)="searchLocation()" aria-label="Search custom location">
+          <i class="fas fa-map-marker-alt"></i> Search
+        </button>
+      </div>
+    </div>
+  
+    <div class="content-container">
+      <div class="map-container">
+        <!-- This would be replaced with Google Maps or similar -->
+        <div class="map-placeholder">
+          <p *ngIf="loading">Loading map...</p>
+          <p *ngIf="error">Unable to load map. Please try again later.</p>
+          <div *ngIf="!loading && !error" class="map-content">
+            <!-- In a real app, this would be replaced with a Google Maps component -->
+            <img src="assets/images/africa.jpg" alt="Map of hubs in Africa" class="map-image">
+            <div class="map-pins">
+              <div 
+                *ngFor="let hub of filteredHubs" 
+                class="map-pin"
+                [style.left.%]="hub.mapPosition?.x"
+                [style.top.%]="hub.mapPosition?.y"
+                [title]="hub.name"
+              >
+                <i class="fas fa-map-pin" [ngClass]="hub.type"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="hubs-list">
+        <h2>Available Hubs <span *ngIf="filteredHubs.length">({{filteredHubs.length}} results)</span></h2>
+        
+        <div class="loading-state" *ngIf="loading">
+          <div class="spinner"></div>
+          <p>Loading hubs...</p>
+        </div>
+        
+        <div class="error-state" *ngIf="error">
+          <i class="fas fa-exclamation-circle"></i>
+          <p>Unable to load hubs. Please try again later.</p>
+          <button (click)="loadHubs()">Retry</button>
+        </div>
+        
+        <div class="no-results" *ngIf="!loading && !error && filteredHubs.length === 0">
+          <i class="fas fa-search"></i>
+          <p>No hubs found matching your criteria.</p>
+          <button (click)="searchTerm = ''; selectedLocation = ''; selectedType = ''; applyFilters()">
+            Clear filters
+          </button>
+        </div>
+        
+        <div class="hub-cards">
+          <div class="hub-card" *ngFor="let hub of filteredHubs">
+            <div class="hub-card-header">
+              <div class="hub-type">
+                <img src="assets/images/hero.jpg" [alt]="hub.type">
+                <span>{{hub.type === 'device-center' ? 'Device Center' : 
+                       hub.type === 'hotspot' ? 'Internet Hotspot' : 
+                       hub.type === 'training' ? 'Training Center' : 'Hub'}}</span>
+              </div>
+              <div class="hub-actions">
+                <button class="favorite-btn" (click)="toggleFavorite(hub)" [attr.aria-label]="hub.isFavorite ? 'Remove from favorites' : 'Add to favorites'">
+                  <i class="fas" [ngClass]="hub.isFavorite ? 'fa-heart' : 'fa-heart-o'"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="hub-card-content">
+              <h3>{{hub.name}}</h3>
+              <div class="hub-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{hub.location}}</span>
+              </div>
+              <div class="hub-status" [ngClass]="getHubStatusClass(hub.status)">
+                <i class="fas fa-circle"></i>
+                <span>{{hub.status}}</span>
+              </div>
+              <p class="hub-description">{{hub.description}}</p>
+              
+              <div class="hub-stats">
+                <div class="stat">
+                  <i class="fas fa-laptop"></i>
+                  <span>{{hub.devicesDonated}} Devices</span>
+                </div>
+                <div class="stat">
+                  <i class="fas fa-users"></i>
+                  <span>{{hub.studentsHelped}} Students</span>
+                </div>
+                <div class="stat" *ngIf="hub.cost !== undefined">
+                  <i class="fas fa-tag"></i>
+                  <span>{{hub.cost === 0 ? 'Free' : (hub.cost | currency)}}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="hub-card-footer">
+              <button class="primary-btn">
+                <i class="fas fa-info-circle"></i> More Info
+              </button>
+              <button class="secondary-btn">
+                <i class="fas fa-directions"></i> Directions
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

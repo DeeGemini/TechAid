@@ -1,0 +1,419 @@
+@import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
+
+.devices-page {
+    padding: 1.5rem;
+    color: $light-text;
+
+    .page-header {
+        margin-bottom: 2rem;
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: $primary-color;
+        }
+
+        p {
+            font-size: 1rem;
+            color: $gray-medium;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: $primary-color;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            @include transition(all);
+
+            i {
+                margin-right: 0.5rem;
+            }
+
+            &:hover {
+                background-color: $primary-dark;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+
+    .donations-list {
+        .donation-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            @include transition(all);
+
+            &:hover {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            &.expanded {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            }
+
+            .donation-header {
+                padding: 1.25rem 1.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                cursor: pointer;
+                @include transition(all);
+
+                &:hover {
+                    background-color: rgba($primary-light, 0.05);
+                }
+
+                .donation-id {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+
+                    .badge {
+                        display: inline-block;
+                        padding: 0.25rem 0.5rem;
+                        border-radius: 20px;
+                        font-size: 0.7rem;
+                        font-weight: bold;
+                        color: white;
+                        margin-right: 1rem;
+                        text-transform: uppercase;
+                    }
+
+                    strong {
+                        font-size: 0.9rem;
+                        color: $gray-dark;
+                    }
+                }
+
+                .donation-school, .donation-date, .donation-total {
+                    flex: 1;
+                    font-size: 0.9rem;
+                    color: $gray-dark;
+                    display: flex;
+                    align-items: center;
+
+                    i {
+                        margin-right: 0.5rem;
+                        color: $gray-medium;
+                        font-size: 0.8rem;
+                    }
+                }
+
+                .donation-toggle {
+                    i {
+                        color: $gray-medium;
+                        @include transition(all);
+                    }
+                }
+            }
+
+            .donation-details {
+                padding: 1.5rem;
+                border-top: 1px solid $gray-light;
+                background-color: rgba($gray-light, 0.2);
+
+                h3 {
+                    font-size: 1.1rem;
+                    color: $primary-dark;
+                    margin-bottom: 1rem;
+                }
+
+                .devices-section {
+                    margin-bottom: 2rem;
+
+                    .devices-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                        gap: 1rem;
+
+                        .device-item {
+                            background: white;
+                            border-radius: 5px;
+                            padding: 1rem;
+                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+                            .device-type {
+                                font-weight: bold;
+                                margin-bottom: 0.5rem;
+                                display: flex;
+                                align-items: center;
+
+                                i {
+                                    margin-right: 0.5rem;
+                                    color: $primary-color;
+                                }
+                            }
+
+                            .device-quantity, .device-condition, .device-specs {
+                                font-size: 0.85rem;
+                                margin-bottom: 0.3rem;
+                                color: $gray-dark;
+                            }
+
+                            .device-specs {
+                                color: $gray-medium;
+                            }
+                        }
+                    }
+                }
+
+                .delivery-section {
+                    margin-bottom: 2rem;
+
+                    .delivery-info {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                        gap: 1.5rem;
+
+                        .info-item {
+                            label {
+                                display: block;
+                                font-size: 0.8rem;
+                                color: $gray-medium;
+                                margin-bottom: 0.25rem;
+                            }
+
+                            span {
+                                font-size: 0.9rem;
+                                color: $gray-dark;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+                }
+
+                .impact-section {
+                    .impact-message {
+                        background-color: rgba($primary-light, 0.1);
+                        border-left: 4px solid $primary-color;
+                        padding: 1.5rem;
+                        border-radius: 0 5px 5px 0;
+                        position: relative;
+
+                        i.fa-quote-left {
+                            position: absolute;
+                            top: 1rem;
+                            left: 1rem;
+                            color: rgba($primary-color, 0.2);
+                            font-size: 2rem;
+                        }
+
+                        p {
+                            padding-left: 2rem;
+                            color: $gray-dark;
+                            font-style: italic;
+                            margin-bottom: 1rem;
+                        }
+
+                        .impact-stats {
+                            display: flex;
+                            gap: 1.5rem;
+                            padding-left: 2rem;
+
+                            .stat {
+                                display: flex;
+                                align-items: center;
+                                font-size: 0.85rem;
+                                color: $primary-dark;
+
+                                i {
+                                    margin-right: 0.5rem;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .empty-state {
+        background: white;
+        border-radius: 10px;
+        padding: 3rem 2rem;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+        .empty-content {
+            max-width: 400px;
+            margin: 0 auto;
+
+            i {
+                font-size: 3rem;
+                color: $primary-light;
+                margin-bottom: 1rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+                color: $primary-dark;
+                margin-bottom: 0.5rem;
+            }
+
+            p {
+                color: $gray-medium;
+                margin-bottom: 1.5rem;
+            }
+        }
+    }
+}
+
+// Dark mode styles
+.dark-mode {
+    .devices-page {
+        color: $dark-text;
+
+        .page-header {
+            h1 {
+                color: $primary-light;
+            }
+
+            .btn-primary {
+                background-color: $primary-dark;
+
+                &:hover {
+                    background-color: darken($primary-dark, 10%);
+                }
+            }
+        }
+
+        .donations-list {
+            .donation-card {
+                background: lighten($dark-bg, 5%);
+
+                .donation-header {
+                    &:hover {
+                        background-color: lighten($dark-bg, 8%);
+                    }
+
+                    .donation-id {
+                        strong {
+                            color: $gray-light;
+                        }
+                    }
+
+                    .donation-school, .donation-date, .donation-total {
+                        color: $gray-light;
+
+                        i {
+                            color: $gray-medium;
+                        }
+                    }
+                }
+
+                .donation-details {
+                    border-top-color: lighten($dark-bg, 10%);
+                    background-color: lighten($dark-bg, 3%);
+
+                    h3 {
+                        color: $primary-light;
+                    }
+
+                    .devices-section {
+                        .devices-grid {
+                            .device-item {
+                                background: lighten($dark-bg, 7%);
+                                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+                                .device-type {
+                                    i {
+                                        color: $primary-light;
+                                    }
+                                }
+
+                                .device-quantity, .device-condition, .device-specs {
+                                    color: $gray-light;
+                                }
+
+                                .device-specs {
+                                    color: $gray-medium;
+                                }
+                            }
+                        }
+                    }
+
+                    .delivery-section {
+                        .info-item {
+                            span {
+                                color: $gray-light;
+                            }
+                        }
+                    }
+
+                    .impact-section {
+                        .impact-message {
+                            background-color: lighten($dark-bg, 8%);
+                            border-left-color: $primary-color;
+
+                            p {
+                                color: $gray-light;
+                            }
+
+                            .impact-stats {
+                                .stat {
+                                    color: $primary-light;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .empty-state {
+            background: lighten($dark-bg, 5%);
+
+            h3 {
+                color: $primary-light;
+            }
+        }
+    }
+}
+
+@media (max-width: 992px) {
+    .donations-list {
+        .donation-card {
+            .donation-header {
+                flex-wrap: wrap;
+
+                .donation-id, .donation-school, .donation-date, .donation-total {
+                    flex: 1 1 50% !important;
+                    margin-bottom: 0.5rem;
+                }
+
+                .donation-toggle {
+                    flex: 0 0 auto;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    .donations-list {
+        .donation-card {
+            .donation-header {
+                .donation-id, .donation-school, .donation-date, .donation-total {
+                    flex: 1 1 100% !important;
+                }
+            }
+        }
+    }
+
+    .impact-section {
+        .impact-message {
+            .impact-stats {
+                flex-direction: column;
+                gap: 0.5rem !important;
+            }
+        }
+    }
+}

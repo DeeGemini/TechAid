@@ -1,0 +1,546 @@
+@import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
+
+.hubs-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $light-bg;
+  color: $light-text;
+  
+  &.dark-mode {
+    background-color: $dark-bg;
+    color: $dark-text;
+    
+    .hubs-header {
+      background: linear-gradient(rgba(26, 26, 46, 0.9), rgba(26, 26, 46, 0.8)), 
+                  url('/assets/images/education-bg-dark.jpg');
+    }
+    
+    .filters-container {
+      background-color: darken($dark-bg, 3%);
+    }
+    
+    .search-box input, 
+    .filter-group select, 
+    .custom-location input {
+      background-color: lighten($dark-bg, 5%);
+      color: $dark-text;
+      border: 1px solid lighten($dark-bg, 15%);
+      
+      &::placeholder {
+        color: darken($dark-text, 25%);
+      }
+    }
+    
+    .hub-card {
+      background-color: lighten($dark-bg, 5%);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    
+    .map-container {
+      background-color: lighten($dark-bg, 5%);
+      border: 1px solid lighten($dark-bg, 15%);
+    }
+    
+    button {
+      &.primary-btn {
+        background-color: $primary-color;
+        
+        &:hover {
+          background-color: lighten($primary-color, 5%);
+        }
+      }
+      
+      &.secondary-btn {
+        background-color: transparent;
+        border: 1px solid $primary-color;
+        color: $primary-light;
+        
+        &:hover {
+          background-color: rgba($primary-color, 0.1);
+        }
+      }
+    }
+  }
+}
+
+.hubs-header {
+  width: 100%;
+  height: 240px;
+  background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.8)), 
+              url('/assets/images/education-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  @include flex-center;
+  flex-direction: column;
+  text-align: center;
+  padding: 2rem;
+  margin-bottom: 1rem;
+  
+  .header-content {
+    max-width: 800px;
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: $primary-dark;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      color: $gray-dark;
+    }
+  }
+}
+
+.filters-container {
+  padding: 1.5rem;
+  background-color: $gray-light;
+  border-radius: 8px;
+  margin: 0 1rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+  
+  .search-box {
+    flex: 2;
+    position: relative;
+    min-width: 250px;
+    
+    input {
+      width: 80%;
+      margin-left: 2.5rem;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border-radius: 4px;
+      border: 1px solid $gray-medium;
+      font-size: 1rem;
+      @include transition;
+      
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-light, 0.3);
+        outline: none;
+      }
+    }
+    
+    i {
+      position: absolute;
+      left: 2.75rem;
+      top: 40%;
+      transform: translateY(-50%);
+      color: $gray-medium;
+    }
+  }
+  
+  .filter-options {
+    flex: 3;
+    display: flex;
+    gap: 1rem;
+    
+    @media (max-width: 768px) {
+      flex-wrap: wrap;
+    }
+    
+    .filter-group {
+      flex: 1;
+      min-width: 150px;
+      
+      label {
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: $gray-dark;
+      }
+      
+      select {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 4px;
+        border: 1px solid $gray-medium;
+        font-size: 1rem;
+        background-color: white;
+        @include transition;
+        cursor: pointer;
+        
+        &:focus {
+          border-color: $primary-color;
+          box-shadow: 0 0 0 2px rgba($primary-light, 0.3);
+          outline: none;
+        }
+      }
+    }
+  }
+  
+  .custom-location {
+    flex: 2;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    
+    input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      border: 1px solid $gray-medium;
+      font-size: 1rem;
+      @include transition;
+      
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-light, 0.3);
+        outline: none;
+      }
+    }
+    
+    button {
+      padding: 0.75rem 1rem;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      @include transition;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      
+      &:hover {
+        background-color: $primary-dark;
+      }
+      
+      i {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 0 1rem 2rem;
+  
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+  
+  .map-container {
+    flex: 2;
+    min-width: 300px;
+    height: 600px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid $gray-light;
+    
+    .map-placeholder {
+      width: 100%;
+      height: 100%;
+      @include flex-center;
+      background-color: #f5f7fa;
+      position: relative;
+      
+      p {
+        text-align: center;
+        color: $gray-dark;
+      }
+      
+      .map-content {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        
+        .map-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        
+        .map-pins {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          
+          .map-pin {
+            position: absolute;
+            transform: translate(-50%, -100%);
+            
+            i {
+              font-size: 1.5rem;
+              color: $primary-color;
+              filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+              
+              &.device-center {
+                color: $primary-dark;
+              }
+              
+              &.hotspot {
+                color: $secondary-color;
+              }
+              
+              &.training {
+                color: mix($primary-color, $secondary-color, 50%);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .hubs-list {
+    flex: 3;
+    min-width: 300px;
+    
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: $primary-dark;
+      
+      span {
+        font-size: 1rem;
+        font-weight: normal;
+        color: $gray-dark;
+      }
+    }
+    
+    .loading-state, .error-state, .no-results {
+      padding: 2rem;
+      @include flex-center;
+      flex-direction: column;
+      text-align: center;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      
+      i, .spinner {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: $primary-color;
+      }
+      
+      p {
+        margin-bottom: 1rem;
+        color: $gray-dark;
+      }
+      
+      button {
+        padding: 0.5rem 1rem;
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        @include transition;
+        
+        &:hover {
+          background-color: $primary-dark;
+        }
+      }
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba($primary-light, 0.3);
+      border-top-color: $primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .hub-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .hub-card {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      @include transition;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+      
+      .hub-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid $gray-light;
+        
+        .hub-type {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          
+          img {
+            width: 24px;
+            height: 24px;
+          }
+          
+          span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: $gray-dark;
+          }
+        }
+        
+        .hub-actions {
+          .favorite-btn {
+            background: none;
+            border: none;
+            color: $gray-medium;
+            cursor: pointer;
+            font-size: 1.2rem;
+            @include transition;
+            
+            &:hover {
+              color: $secondary-color;
+            }
+            
+            i.fa-heart {
+              color: $secondary-color;
+            }
+          }
+        }
+      }
+      
+      .hub-card-content {
+        padding: 1rem;
+        
+        h3 {
+          font-size: 1.25rem;
+          margin-bottom: 0.5rem;
+          color: $primary-dark;
+        }
+        
+        .hub-location, .hub-status {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+          font-size: 0.9rem;
+          
+          i {
+            font-size: 0.85rem;
+            color: $gray-dark;
+          }
+        }
+        
+        .hub-status {
+          &.status-active i {
+            color: #28a745;
+          }
+          
+          &.status-closed i {
+            color: #dc3545;
+          }
+          
+          &.status-limited i {
+            color: #ffc107;
+          }
+        }
+        
+        .hub-description {
+          margin: 0.75rem 0;
+          font-size: 0.95rem;
+          color: $gray-dark;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        
+        .hub-stats {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
+          margin-top: 1rem;
+          
+          .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.75rem;
+            background-color: $gray-light;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            
+            i {
+              color: $primary-color;
+            }
+          }
+        }
+      }
+      
+      .hub-card-footer {
+        padding: 1rem;
+        display: flex;
+        gap: 0.75rem;
+        border-top: 1px solid $gray-light;
+        
+        button {
+          flex: 1;
+          padding: 0.75rem;
+          border-radius: 4px;
+          font-weight: 600;
+          cursor: pointer;
+          @include transition;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.5rem;
+          
+          i {
+            font-size: 0.9rem;
+          }
+          
+          &.primary-btn {
+            background-color: $primary-color;
+            color: white;
+            border: none;
+            
+            &:hover {
+              background-color: $primary-dark;
+            }
+          }
+          
+          &.secondary-btn {
+            background-color: white;
+            color: $primary-color;
+            border: 1px solid $primary-color;
+            
+            &:hover {
+              background-color: rgba($primary-color, 0.05);
+            }
+          }
+        }
+      }
+    }
+  }
+}

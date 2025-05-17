@@ -1,0 +1,27 @@
+@import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
+
+.donation-thank-you-container {
+    text-align: center;
+    padding: $spacing-lg;
+
+    .page-title {
+        color: $primary-dark;
+        margin-bottom: $spacing-md;
+    }
+
+    .thank-you-message {
+        font-size: 1.2rem;
+        color: $text-secondary;
+        margin-bottom: $spacing-lg;
+    }
+
+    p {
+        color: $text-secondary;
+        margin-bottom: $spacing-sm;
+    }
+
+    button {
+        margin-top: $spacing-lg;
+    }
+}

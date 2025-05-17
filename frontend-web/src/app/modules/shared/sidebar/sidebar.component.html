@@ -1,0 +1,56 @@
+<div class="sidebar" [class.collapsed]="isCollapsed && !isMobileView" [class.dark-mode]="isDarkMode"
+    [class.mobile-sidebar]="isMobileView" [class.mobile-open]="isMobileOpen">
+
+    <button *ngIf="isMobileView" class="mobile-close-btn" (click)="closeSidebar.emit()">
+        <i class="fas fa-times"></i>
+    </button>
+
+    <div class="sidebar-header" routerLink="/">
+        <div class="logo-container">
+            <i class="fas fa-laptop-code logo-icon"></i>
+            <span class="logo-text" *ngIf="!isCollapsed || isMobileView">{{ title }}</span>
+        </div>
+        <p class="sidebar-subtitle" *ngIf="!isCollapsed || isMobileView">{{ subtitle }}</p>
+    </div>
+
+    <div class="sidebar-profile" *ngIf="profileInfo && (!isCollapsed || isMobileView)">
+        <div class="avatar" [class.has-image]="profileInfo.avatar">
+            <img *ngIf="profileInfo.avatar" [src]="profileInfo.avatar" alt="Profile">
+            <i *ngIf="!profileInfo.avatar" class="fas fa-user"></i>
+        </div>
+        <div class="profile-info">
+            <h4>{{ profileInfo.name }}</h4>
+            <p>{{ profileInfo.role }}</p>
+        </div>
+    </div>
+
+    <div class="collapsed-avatar" *ngIf="isCollapsed && profileInfo && !isMobileView" (click)="toggleCollapse.emit()">
+        <div class="avatar" [class.has-image]="profileInfo.avatar">
+            <img *ngIf="profileInfo.avatar" [src]="profileInfo.avatar" alt="Profile">
+            <i *ngIf="!profileInfo.avatar" class="fas fa-user"></i>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <ul>
+            <li *ngFor="let item of items" [class.active]="routeIsActive(item.route)" (click)="handleItemClick()">
+                <a [routerLink]="item.route" [title]="item.label">
+                    <i class="fas fa-{{ item.icon }}"></i>
+                    <span *ngIf="!isCollapsed || isMobileView">{{ item.label }}</span>
+                    <span class="badge" *ngIf="item.badge && (!isCollapsed || isMobileView)">{{ item.badge }}</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+        <button class="theme-toggle" (click)="toggleDarkMode()">
+            <i class="fas" [class.fa-moon]="!isDarkMode" [class.fa-sun]="isDarkMode"></i>
+            <span *ngIf="!isCollapsed || isMobileView">{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
+        </button>
+    </div>
+
+    <button class="sidebar-toggle" (click)="toggleCollapse.emit()" *ngIf="!isMobileView">
+        <i class="fas" [class.fa-chevron-left]="!isCollapsed" [class.fa-chevron-right]="isCollapsed"></i>
+    </button>
+</div>

@@ -1,0 +1,54 @@
+@import '../../../assets/styles/variables';
+@import '../../../assets/styles/mixins';
+.donor-corner-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: $light-bg;
+
+    .content-area {
+        flex: 1;
+        padding: 2rem;
+        // margin-left: 250px;
+        @include transition(margin-left);
+
+        &.collapsed {
+            margin-left: 80px;
+        }
+
+        &.mobile-overlay {
+            &::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 998;
+            }
+        }
+    }
+}
+
+// Dark mode
+.dark-mode {
+    .donor-corner-container {
+        background-color: $dark-bg;
+
+        .content-area {
+            background-color: darken($dark-bg, 2%);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .donor-corner-container {
+        .content-area {
+            margin-left: 0;
+
+            &.collapsed {
+                margin-left: 0;
+            }
+        }
+    }
+}

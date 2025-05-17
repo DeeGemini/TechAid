@@ -1,0 +1,413 @@
+@import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
+
+.donor-dashboard {
+    padding: 1.5rem;
+    color: $light-text;
+
+    .dashboard-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        color: $primary-color;
+    }
+
+    .dashboard-subtitle {
+        font-size: 1rem;
+        color: $gray-medium;
+        margin-bottom: 2rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            @include transition(all);
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .stat-icon {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: rgba($primary-color, 0.1);
+                color: $primary-color;
+                @include flex-center;
+                font-size: 1.2rem;
+                margin-right: 1rem;
+            }
+
+            .stat-content {
+                h3 {
+                    font-size: 0.9rem;
+                    color: $gray-dark;
+                    margin-bottom: 0.5rem;
+                }
+
+                .stat-value {
+                    font-size: 1.8rem;
+                    font-weight: bold;
+                    color: $primary-dark;
+                    margin-bottom: 0.2rem;
+                }
+
+                .stat-trend {
+                    font-size: 0.8rem;
+                    display: flex;
+                    align-items: center;
+
+                    i {
+                        margin-right: 0.3rem;
+                    }
+
+                    &.up {
+                        color: #28a745;
+                    }
+
+                    &.down {
+                        color: #dc3545;
+                    }
+                }
+            }
+        }
+    }
+
+    .dashboard-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+
+        .dashboard-col {
+            flex: 1;
+            min-width: 300px;
+        }
+    }
+
+    .card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+        @include transition(all);
+
+        &:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid $gray-light;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            h3 {
+                font-size: 1.2rem;
+                margin: 0;
+                color: $primary-dark;
+            }
+
+            .view-all {
+                font-size: 0.8rem;
+                color: $primary-color;
+                text-decoration: none;
+                @include transition(color);
+
+                &:hover {
+                    color: $primary-dark;
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+    }
+
+    .activity-list {
+        .activity-item {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid $gray-light;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .activity-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                @include flex-center;
+                margin-right: 1rem;
+                color: white;
+                font-size: 1rem;
+
+                &.device {
+                    background-color: $primary-color;
+                }
+
+                &.hotspot {
+                    background-color: $secondary-color;
+                }
+            }
+
+            .activity-content {
+                flex: 1;
+
+                h4 {
+                    font-size: 1rem;
+                    margin: 0 0 0.3rem 0;
+                    color: $gray-dark;
+                }
+
+                p {
+                    font-size: 0.9rem;
+                    color: $gray-medium;
+                    margin: 0 0 0.5rem 0;
+                }
+
+                .activity-footer {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.8rem;
+
+                    .activity-date {
+                        color: $gray-medium;
+                    }
+
+                    .activity-status {
+                        padding: 0.2rem 0.5rem;
+                        border-radius: 20px;
+                        font-size: 0.7rem;
+                        font-weight: bold;
+                        text-transform: uppercase;
+
+                        &.delivered {
+                            background-color: rgba(#28a745, 0.1);
+                            color: #28a745;
+                        }
+
+                        &.active {
+                            background-color: rgba(#17a2b8, 0.1);
+                            color: #17a2b8;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .chart-container {
+        margin-bottom: 1.5rem;
+
+        h4 {
+            font-size: 0.9rem;
+            color: $gray-dark;
+            margin-bottom: 1rem;
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background-color: $gray-light;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+
+        .chart-simulation {
+            display: flex;
+            height: 100%;
+            align-items: flex-end;
+            gap: 1rem;
+            padding-top: 1rem;
+
+            .chart-bar {
+                flex: 1;
+                position: relative;
+                border-radius: 5px 5px 0 0;
+                @include flex-center;
+                flex-direction: column;
+                min-height: 20px;
+
+                .chart-label {
+                    position: absolute;
+                    top: -20px;
+                    font-size: 0.7rem;
+                    font-weight: bold;
+                }
+
+                .chart-category {
+                    position: absolute;
+                    bottom: -25px;
+                    font-size: 0.7rem;
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    .quick-actions {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+
+        h3 {
+            font-size: 1.2rem;
+            color: $primary-dark;
+            margin-bottom: 1rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+
+            .action-button {
+                background: white;
+                border: 1px solid $gray-light;
+                border-radius: 8px;
+                padding: 1.5rem 1rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                @include transition(all);
+
+                i {
+                    font-size: 1.5rem;
+                    color: $primary-color;
+                    margin-bottom: 0.5rem;
+                }
+
+                span {
+                    font-size: 0.9rem;
+                    color: $gray-dark;
+                }
+
+                &:hover {
+                    border-color: $primary-light;
+                    background-color: rgba($primary-light, 0.05);
+                    transform: translateY(-3px);
+
+                    i {
+                        color: $primary-dark;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Dark mode styles
+.dark-mode {
+    .donor-dashboard {
+        color: $dark-text;
+
+        .dashboard-title {
+            color: $primary-light;
+        }
+
+        .dashboard-subtitle {
+            color: $gray-medium;
+        }
+
+        .stat-card {
+            background: lighten($dark-bg, 5%);
+
+            .stat-content {
+                h3 {
+                    color: $gray-light;
+                }
+
+                .stat-value {
+                    color: $primary-light;
+                }
+            }
+        }
+
+        .card {
+            background: lighten($dark-bg, 5%);
+
+            .card-header {
+                border-bottom-color: lighten($dark-bg, 10%);
+
+                h3 {
+                    color: $primary-light;
+                }
+            }
+        }
+
+        .activity-list {
+            .activity-item {
+                border-bottom-color: lighten($dark-bg, 10%);
+
+                .activity-content {
+                    h4 {
+                        color: $gray-light;
+                    }
+
+                    p {
+                        color: $gray-medium;
+                    }
+                }
+            }
+        }
+
+        .chart-placeholder {
+            background-color: lighten($dark-bg, 10%);
+        }
+
+        .quick-actions {
+            .action-button {
+                background: lighten($dark-bg, 5%);
+                border-color: lighten($dark-bg, 10%);
+
+                span {
+                    color: $gray-light;
+                }
+
+                &:hover {
+                    background-color: lighten($dark-bg, 8%);
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .donor-dashboard {
+        padding: 1rem;
+
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .dashboard-row {
+            flex-direction: column;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .donor-dashboard {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .actions-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+}

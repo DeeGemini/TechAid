@@ -1,0 +1,43 @@
+<div class="user-management-container">
+    <h2 class="page-title">User Management</h2>
+
+    <div *ngIf="loading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin fa-2x"></i> Loading users...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+    <div *ngIf="users && users.length > 0; else noUsers">
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Registered On</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.registrationDate | date }}</td>
+                    <td>{{ user.isActive ? 'Active' : 'Inactive' }}</td>
+                    <td>
+                        <button class="link-button" (click)="viewUserDetails(user.id)">View Details</button>
+                        <button class="secondary-button small" (click)="toggleUserStatus(user.id, user.isActive)">
+                            {{ user.isActive ? 'Deactivate' : 'Activate' }}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noUsers>
+        <p>No users registered yet.</p>
+    </ng-template>
+</div>

@@ -1,0 +1,21 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { HubManagementComponent } from './hub-management.component';
+
+describe('HubManagementComponent', () => {
+  let component: HubManagementComponent;
+  let fixture: ComponentFixture<HubManagementComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [HubManagementComponent]
+    });
+    fixture = TestBed.createComponent(HubManagementComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

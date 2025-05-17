@@ -1,0 +1,10 @@
+<div class="school-corner-container">
+    <app-sidebar [title]="sidebarConfig.title" [subtitle]="sidebarConfig.subtitle" [items]="sidebarConfig.items"
+        [profileInfo]="sidebarConfig.profileInfo" [themeColor]="sidebarConfig.themeColor"
+        [isCollapsed]="sidebarCollapsed" (toggleCollapse)="onToggleSidebar()"></app-sidebar>
+
+    <div class="content-area" [class.collapsed]="sidebarCollapsed"
+        [class.mobile-overlay]="isMobileView && !sidebarCollapsed">
+        <router-outlet></router-outlet>
+    </div>
+</div>

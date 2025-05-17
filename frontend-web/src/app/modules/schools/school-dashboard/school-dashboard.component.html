@@ -1,0 +1,105 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>School Dashboard</h1>
+    <p class="subtitle">Welcome back! Here's what's happening with your institution.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let card of statCards" [style.--card-color]="card.color || primaryColor">
+      <div class="card-icon">
+        <i class="fas" [ngClass]="card.icon"></i>
+      </div>
+      <div class="card-content">
+        <h3>{{card.value}}</h3>
+        <p>{{card.title}}</p>
+      </div>
+      <div class="card-trend" *ngIf="card.trend">
+        <!-- <fa-icon [icon]="['fas', card.trend === 'up' ? 'arrow-up' : 'arrow-down']"></fa-icon> -->
+         <i class="fas" [ngClass]="card.trend === 'up' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+        <span>{{card.trendValue}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="main-content">
+      <div class="chart-container">
+        <h3>Monthly Progress</h3>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="chartData" [options]="chartOptions" type="bar">
+          </canvas>
+        </div>
+      </div>
+
+      <div class="recent-activities">
+        <h3>Recent Activities</h3>
+        <div class="activities-list">
+          <div class="activity-item" *ngFor="let activity of recentActivities">
+            <div class="activity-icon" [class]="getStatusClass(activity.status)">
+              <!-- <fa-icon [icon]="['fas', getActivityIcon(activity.type)]"></fa-icon> -->
+               <i class="fas" [ngClass]="'fa-' + (getActivityIcon(activity.type))"></i>
+            </div>
+            <div class="activity-content">
+              <h4>{{activity.title}}</h4>
+              <p>{{activity.description}}</p>
+              <small>{{activity.date | date:'mediumDate'}}</small>
+            </div>
+            <div class="activity-status" *ngIf="activity.status">
+              <span [class]="getStatusClass(activity.status)">{{activity.status | titlecase}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="action-button" routerLink="../devices">
+          <!-- <fa-icon [icon]="['fas', 'laptop']"></fa-icon> -->
+          <i class="fas fa-laptop"></i>
+          <span>Request Devices</span>
+        </button>
+        <button class="action-button" routerLink="../hotspots">
+          <!-- <fa-icon [icon]="['fas', 'wifi']"></fa-icon> -->
+          <i class="fas fa-wifi"></i>
+          <span>Find Hotspots</span>
+        </button>
+        <button class="action-button" routerLink="../students">
+          <!-- <fa-icon [icon]="['fas', 'user-plus']"></fa-icon> -->
+          <i class="fas fa-user-plus"></i>
+          <span>Add Students</span>
+        </button>
+        <button class="action-button" routerLink="../report">
+          <!-- <fa-icon [icon]="['fas', 'chart-bar']"></fa-icon> -->
+          <i class="fas fa-chart-bar"></i>
+          <span>Generate Report</span>
+        </button>
+      </div>
+
+      <div class="upcoming-events">
+        <h3>Upcoming Events</h3>
+        <div class="event-item">
+          <div class="event-date">
+            <span class="day">15</span>
+            <span class="month">JUN</span>
+          </div>
+          <div class="event-details">
+            <h4>Device Distribution</h4>
+            <p>10:00 AM - School Campus</p>
+          </div>
+        </div>
+        <div class="event-item">
+          <div class="event-date">
+            <span class="day">22</span>
+            <span class="month">JUN</span>
+          </div>
+          <div class="event-details">
+            <h4>TechAid Workshop</h4>
+            <p>02:00 PM - Online</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
