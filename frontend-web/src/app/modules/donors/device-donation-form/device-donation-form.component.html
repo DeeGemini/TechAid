@@ -1,0 +1,168 @@
+<div class="donation-form-container">
+    <div class="form-header">
+        <h2>Donate Devices</h2>
+        <p>Fill out the form below to donate devices to schools in need</p>
+    </div>
+
+    <div class="success-message" *ngIf="showSuccess">
+        <div class="success-content">
+            <i class="fas fa-check-circle"></i>
+            <h3>Donation Submitted Successfully!</h3>
+            <p>Thank you for your generous donation. We'll contact you shortly to arrange pickup/delivery.</p>
+            <button (click)="showSuccess = false" class="btn-outline">
+                <i class="fas fa-plus"></i> Donate Another Device
+            </button>
+        </div>
+    </div>
+
+    <form *ngIf="!showSuccess" [formGroup]="donationForm" (ngSubmit)="onSubmit()" class="donation-form">
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-school"></i>
+                School Information
+            </h3>
+            <div class="form-group">
+                <label for="school">Select School/Program</label>
+                <select id="school" formControlName="school" class="form-control" [class.invalid]="donationForm.get('school')?.invalid && donationForm.get('school')?.touched">
+                    <option value="">-- Select a school --</option>
+                    <option *ngFor="let school of schools" [value]="school.id">{{ school.name }} ({{ school.location }}) - {{ school.students }} students</option>
+                </select>
+                <div class="error-message" *ngIf="donationForm.get('school')?.invalid && donationForm.get('school')?.touched">
+                    Please select a school
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-laptop"></i>
+                Device Information
+            </h3>
+            
+            <div formArrayName="devices" class="devices-array">
+                <div *ngFor="let device of devicesArray.controls; let i = index" [formGroupName]="i" class="device-group">
+                    <div class="device-header">
+                        <h4>Device {{ i + 1 }}</h4>
+                        <button type="button" (click)="removeDevice(i)" class="btn-remove" *ngIf="devicesArray.length > 1">
+                            <i class="fas fa-times"></i> Remove
+                        </button>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label [for]="'type-' + i">Device Type</label>
+                            <select [id]="'type-' + i" formControlName="type" class="form-control" [class.invalid]="device.get('type')?.invalid && device.get('type')?.touched">
+                                <option value="">-- Select device type --</option>
+                                <option *ngFor="let type of deviceTypes" [value]="type">{{ type }}</option>
+                            </select>
+                            <div class="error-message" *ngIf="device.get('type')?.invalid && device.get('type')?.touched">
+                                Please select device type
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label [for]="'quantity-' + i">Quantity</label>
+                            <input [id]="'quantity-' + i" type="number" formControlName="quantity" min="1" class="form-control" [class.invalid]="device.get('quantity')?.invalid && device.get('quantity')?.touched">
+                            <div class="error-message" *ngIf="device.get('quantity')?.invalid && device.get('quantity')?.touched">
+                                Please enter valid quantity (minimum 1)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label [for]="'condition-' + i">Condition</label>
+                            <select [id]="'condition-' + i" formControlName="condition" class="form-control">
+                                <option *ngFor="let cond of conditions" [value]="cond">{{ cond }}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label [for]="'accessories-' + i">Accessories Included</label>
+                            <input [id]="'accessories-' + i" type="text" formControlName="accessories" class="form-control" placeholder="Charger, case, etc.">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label [for]="'specifications-' + i">Specifications</label>
+                        <textarea [id]="'specifications-' + i" formControlName="specifications" class="form-control" rows="2" placeholder="RAM, storage, OS version, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="button" (click)="addDevice()" class="btn-add">
+                <i class="fas fa-plus"></i> Add Another Device
+            </button>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-truck"></i>
+                Pickup/Delivery
+            </h3>
+            
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" formControlName="pickupRequired">
+                    <span>I require pickup for these devices</span>
+                </label>
+            </div>
+            
+            <div class="pickup-details" *ngIf="donationForm.get('pickupRequired')?.value">
+                <h4>Pickup Address</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="street">Street Address</label>
+                        <input id="street" type="text" formControlName="street" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input id="city" type="text" formControlName="city" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input id="country" type="text" formControlName="country" class="form-control">
+                    </div>
+                </div>
+                
+                <h4>Contact Person</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactName">Full Name</label>
+                        <input id="contactName" type="text" formControlName="contactName" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactPhone">Phone Number</label>
+                        <input id="contactPhone" type="tel" formControlName="contactPhone" class="form-control">
+                        <div class="error-message" *ngIf="donationForm.get('pickupAddress.contactPhone')?.invalid && donationForm.get('pickupAddress.contactPhone')?.touched">
+                            Please enter a valid phone number
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-group">
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" formControlName="notes" class="form-control" rows="3" placeholder="Any special instructions or information about the devices..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+                <span *ngIf="!isSubmitting">Submit Donation</span>
+                <span *ngIf="isSubmitting">Submitting...</span>
+            </button>
+            
+            <button type="button" routerLink="/donors/devices" class="btn-outline">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

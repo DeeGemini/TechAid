@@ -1,0 +1,35 @@
+<div class="school-profile-container">
+    <h2 class="page-title">School Profile</h2>
+
+    <div *ngIf="schoolDetails; else loading">
+        <div class="profile-info">
+            <h3>School Information</h3>
+            <p><strong>Name:</strong> {{ schoolDetails.name }}</p>
+            <p><strong>Address:</strong> {{ schoolDetails.address }}</p>
+            <p><strong>Contact Person:</strong> {{ schoolDetails.contactPerson }}</p>
+            <p><strong>Contact Email:</strong> {{ schoolDetails.email }}</p>
+            <p><strong>Phone Number:</strong> {{ schoolDetails.phone || 'N/A' }}</p>
+            <p><strong>Students in Need:</strong> {{ schoolDetails.studentCount }}</p>
+            <p><strong>Verification Status:</strong> {{ schoolDetails.verificationStatus }}
+                <span *ngIf="schoolDetails.verificationStatus === 'Rejected'" class="error-message">(Reason: {{
+                    schoolDetails.rejectionReason }})</span>
+            </p>
+            <p><strong>Registration Date:</strong> {{ schoolDetails.registrationDate | date }}</p>
+        </div>
+
+        <div class="profile-actions">
+            <button class="secondary-button" (click)="goBack()">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <ng-template #loading>
+        <div class="loading-indicator">
+            <i class="fas fa-spinner fa-spin fa-2x"></i> Loading profile...
+        </div>
+    </ng-template>
+    <div *ngIf="loading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin fa-2x"></i> Loading profile...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+</div>

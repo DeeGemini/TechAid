@@ -1,0 +1,175 @@
+@import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
+
+.registration-type-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: $light-text;
+  @include transition(background-color, 0.5s);
+
+  &.dark-mode {
+    background-color: $dark-bg;
+    color: $dark-text;
+
+    .option-card {
+      background-color: lighten($dark-bg, 5%);
+      border-color: lighten($dark-bg, 15%);
+    }
+
+    .login-prompt p {
+      color: rgba($dark-text, 0.7);
+    }
+  }
+}
+
+.registration-header {
+  margin-bottom: 3rem;
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+
+    .logo-icon {
+      color: $primary-color;
+      font-size: 1.75rem;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $primary-dark;
+    }
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: $primary-dark;
+  }
+
+  p {
+    color: $gray-medium;
+    font-size: 1.1rem;
+  }
+}
+
+.registration-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.option-card {
+  background-color: white;
+  border: 1px solid $gray-light;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba($primary-color, 0.1);
+    border-color: $primary-light;
+  }
+
+  .option-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: rgba($primary-color, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+
+    i {
+      font-size: 2.5rem;
+      color: $primary-color;
+    }
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: $primary-dark;
+  }
+
+  p {
+    color: $gray-medium;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .select-button {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 1.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: $primary-dark;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.login-prompt {
+  margin-top: 7rem;
+  p {
+    color: $gray-medium;
+
+    a {
+      color: $primary-color;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .registration-options {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .registration-header {
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .registration-type-container {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .option-card {
+    padding: 1.5rem 1rem;
+  }
+}

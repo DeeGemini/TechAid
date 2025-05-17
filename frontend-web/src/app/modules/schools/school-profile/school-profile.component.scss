@@ -1,0 +1,58 @@
+@import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
+
+.school-profile-container {
+    padding: $spacing-lg;
+
+    .page-title {
+        color: $primary-dark;
+        margin-bottom: $spacing-xl;
+        text-align: center;
+    }
+
+    .profile-info {
+        background-color: white;
+        padding: $spacing-md;
+        border-radius: $border-radius-md;
+        @include box-shadow(1);
+        margin-bottom: $spacing-lg;
+
+        h3 {
+            color: $primary-medium;
+            margin-bottom: $spacing-sm;
+        }
+
+        p {
+            color: $text-primary;
+            margin-bottom: $spacing-xs;
+
+            strong {
+                font-weight: bold;
+            }
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+        }
+    }
+
+    .profile-actions {
+        display: flex;
+        gap: $spacing-sm;
+        justify-content: flex-end;
+    }
+
+    .loading-indicator {
+        @include flex-center;
+        font-size: 1.2rem;
+        color: $text-secondary;
+        margin-top: $spacing-lg;
+    }
+
+    .error-message {
+        color: red;
+        text-align: center;
+        margin-top: $spacing-md;
+    }
+}

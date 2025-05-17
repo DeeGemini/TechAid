@@ -1,0 +1,52 @@
+<div class="donation-management-container">
+    <h2 class="page-title">Donation Management</h2>
+
+    <div *ngIf="loading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin fa-2x"></i> Loading donations...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+    <div *ngIf="donations && donations.length > 0; else noDonations">
+        <table>
+            <thead>
+                <tr>
+                    <th>Donation ID</th>
+                    <th>Donor Name</th>
+                    <th>Donor Email</th>
+                    <th>Device Type</th>
+                    <th>Quantity</th>
+                    <th>Submitted On</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let donation of donations">
+                    <td>{{ donation.id }}</td>
+                    <td>{{ donation.donorName }}</td>
+                    <td>{{ donation.donorEmail }}</td>
+                    <td>{{ donation.deviceType }}</td>
+                    <td>{{ donation.quantity }}</td>
+                    <td>{{ donation.submittedDate | date }}</td>
+                    <td>{{ donation.status }}</td>
+                    <td>
+                        <button class="link-button" (click)="viewDonationDetails(donation.id)">View Details</button>
+                        <select [(ngModel)]="donation.status"
+                            (change)="updateDonationStatus(donation.id, donation.status)">
+                            <option value="Pending">Pending</option>
+                            <option value="Received">Received</option>
+                            <option value="Allocated">Allocated</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noDonations>
+        <p>No donations have been submitted yet.</p>
+    </ng-template>
+</div>

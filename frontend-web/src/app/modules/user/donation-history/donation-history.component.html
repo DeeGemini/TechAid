@@ -1,0 +1,36 @@
+<div class="donation-history-container">
+    <h2 class="page-title">My Donation History</h2>
+
+    <div *ngIf="loading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin fa-2x"></i> Loading donation history...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+    <div *ngIf="donations && donations.length > 0; else noDonations">
+        <table>
+            <thead>
+                <tr>
+                    <th>Donation ID</th>
+                    <th>Device Type</th>
+                    <th>Quantity</th>
+                    <th>Submitted On</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let donation of donations">
+                    <td>{{ donation.id }}</td>
+                    <td>{{ donation.deviceType }}</td>
+                    <td>{{ donation.quantity }}</td>
+                    <td>{{ donation.submittedDate | date }}</td>
+                    <td>{{ donation.status }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noDonations>
+        <p>You haven't made any donations yet.</p>
+    </ng-template>
+</div>

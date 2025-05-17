@@ -1,0 +1,19 @@
+<div class="auth-container">
+    <h2 class="page-title">Sign Up</h2>
+    <form (ngSubmit)="register()" #registerForm="ngForm">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" [(ngModel)]="registrationData.email"
+                required email>
+            <div *ngIf="registerForm.controls['email']?.invalid && (registerForm.controls['email']?.dirty || registerForm.controls['email']?.touched)"
+                class="error-message">
+                Please enter a valid email address.
+            </div>
+        </div>
+        <button type="submit" class="primary-button" [disabled]="registerForm.invalid || loading">
+            <i *ngIf="loading" class="fas fa-spinner fa-spin"></i> Sign Up
+        </button>
+    </form>
+
+    <p class="login-link">Already have an account? <a routerLink="/login">Log In</a></p>
+</div>

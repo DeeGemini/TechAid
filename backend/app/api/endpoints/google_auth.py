@@ -26,6 +26,16 @@ async def login(request: Request):
     """
     Login with Google.
     """
+    # Get query parameters
+    return_url = request.query_params.get('return_url', '/test')
+    mode = request.query_params.get('mode', 'default')
+    
+    # Store parameters in session for later use after auth callback
+    request.session['return_url'] = return_url
+    request.session['mode'] = mode
+    # You can log parameters if needed
+    print(f"Login attempt with return_url: {return_url}, mode: {mode}")
+
     redirect_uri = request.url_for('auth')
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
@@ -43,7 +53,20 @@ async def auth(request: Request):
         ) from error
     print(token.get('userinfo'))
 
-    return RedirectResponse(url='/test')
+    user = token.get('userinfo')
+
+    # Retrieve the stored return_url from the session
+    return_url = request.session.get('return_url', 'localhost:4200/')
+    mode = request.session.get('mode', 'default')
+    
+    print(f"Redirecting to: {return_url}, mode: {mode}")
+
+    if user.get('email') == 'carolmkaysmamba14@gmail.com':
+        return_url = 'http://localhost:4200/donors'
+    else:
+        return_url = 'http://localhost:4200/school'
+
+    return RedirectResponse(url=return_url)
 
 @google_router.get('/test')
 def test():

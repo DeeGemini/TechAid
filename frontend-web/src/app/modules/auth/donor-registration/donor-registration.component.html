@@ -1,0 +1,391 @@
+<div class="registration-container">
+    <div class="registration-header">
+        <div class="logo-container">
+            <i class="fas fa-laptop-code logo-icon"></i>
+            <span class="logo-text">TechAid</span>
+        </div>
+        <h1>Become a TechAid Donor</h1>
+        <p>Help bridge the digital divide by donating devices or sharing your internet</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" [style.width]="(currentStep / totalSteps) * 100 + '%'"></div>
+        <div class="progress-steps">
+            <div class="step" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+                <span class="step-number">1</span>
+                <span class="step-label">Basic Info</span>
+            </div>
+            <div class="step" [class.active]="currentStep === 2" [class.completed]="currentStep > 2">
+                <span class="step-number">2</span>
+                <span class="step-label">Donation Type</span>
+            </div>
+            <div class="step" [class.active]="currentStep === 3">
+                <span class="step-number">3</span>
+                <span class="step-label">Details</span>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="donorForm" (ngSubmit)="onSubmit()" class="registration-form">
+        <!-- Step 1: Basic Information -->
+        <div class="form-step" *ngIf="currentStep === 1">
+            <h2 class="step-title">Your Information</h2>
+            <p class="step-description">Tell us about yourself so we can properly acknowledge your donation.</p>
+
+            <!-- Key change: formGroupName added -->
+            <div formGroupName="basicInfo">
+                <div class="form-row">
+                    <div class="form-group"
+                        [class.invalid]="basicInfo.controls['firstName'].invalid && basicInfo.controls['firstName'].touched">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" formControlName="firstName" placeholder="Your first name">
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['firstName'].errors?.['required'] && basicInfo.controls['firstName'].touched">
+                            First name is required
+                        </div>
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['firstName'].errors?.['minlength'] && basicInfo.controls['firstName'].touched">
+                            Minimum 2 characters
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                        [class.invalid]="basicInfo.controls['lastName'].invalid && basicInfo.controls['lastName'].touched">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" formControlName="lastName" placeholder="Your last name">
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['lastName'].errors?.['required'] && basicInfo.controls['lastName'].touched">
+                            Last name is required
+                        </div>
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['lastName'].errors?.['minlength'] && basicInfo.controls['lastName'].touched">
+                            Minimum 2 characters
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group"
+                        [class.invalid]="basicInfo.controls['email'].invalid && basicInfo.controls['email'].touched">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" formControlName="email" placeholder="your@email.com">
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['email'].errors?.['required'] && basicInfo.controls['email'].touched">
+                            Email is required
+                        </div>
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['email'].errors?.['email'] && basicInfo.controls['email'].touched">
+                            Please enter a valid email
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                        [class.invalid]="basicInfo.controls['phoneNumber'].invalid && basicInfo.controls['phoneNumber'].touched">
+                        <label for="phoneNumber">Phone Number *</label>
+                        <input type="tel" id="phoneNumber" formControlName="phoneNumber" placeholder="+1234567890">
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['phoneNumber'].errors?.['required'] && basicInfo.controls['phoneNumber'].touched">
+                            Phone number is required
+                        </div>
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['phoneNumber'].errors?.['pattern'] && basicInfo.controls['phoneNumber'].touched">
+                            Please enter a valid phone number
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group"
+                        [class.invalid]="basicInfo.controls['country'].invalid && basicInfo.controls['country'].touched">
+                        <label for="country">Country *</label>
+                        <select id="country" formControlName="country">
+                            <option value="" disabled selected>Select country</option>
+                            <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+                        </select>
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['country'].errors?.['required'] && basicInfo.controls['country'].touched">
+                            Country is required
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                        [class.invalid]="basicInfo.controls['city'].invalid && basicInfo.controls['city'].touched">
+                        <label for="city">City *</label>
+                        <input type="text" id="city" formControlName="city" placeholder="Your city">
+                        <div class="error-message"
+                            *ngIf="basicInfo.controls['city'].errors?.['required'] && basicInfo.controls['city'].touched">
+                            City is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group terms-group"
+                    [class.invalid]="basicInfo.controls['termsAccepted'].invalid && basicInfo.controls['termsAccepted'].touched">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="termsAccepted" formControlName="termsAccepted">
+                        <label for="termsAccepted">
+                            I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#"
+                                target="_blank">Privacy Policy</a> *
+                        </label>
+                    </div>
+                    <div class="error-message"
+                        *ngIf="basicInfo.controls['termsAccepted'].errors?.['required'] && basicInfo.controls['termsAccepted'].touched">
+                        You must accept the terms to continue
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button type="button" class="next-button" (click)="nextStep()" [disabled]="basicInfo.invalid">
+                    Continue to Donation Type <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Donation Type -->
+        <div class="form-step" *ngIf="currentStep === 2">
+            <h2 class="step-title">What would you like to donate?</h2>
+            <p class="step-description">Select the type of donation you'd like to make. You can choose both options.</p>
+
+            <!-- Key change: formGroupName added -->
+            <div formGroupName="donationType">
+                <div class="donation-options">
+                    <div class="donation-option">
+                        <input type="radio" id="deviceOnly" formControlName="donationKind" value="device">
+                        <label for="deviceOnly">
+                            <div class="option-card">
+                                <i class="fas fa-laptop"></i>
+                                <h3>Device Donation</h3>
+                                <p>Donate laptops, tablets, or smartphones to students in need</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="donation-option">
+                        <input type="radio" id="hotspotOnly" formControlName="donationKind" value="hotspot">
+                        <label for="hotspotOnly">
+                            <div class="option-card">
+                                <i class="fas fa-wifi"></i>
+                                <h3>Hotspot Access</h3>
+                                <p>Share your internet connection as a learning hotspot</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="donation-option">
+                        <input type="radio" id="bothDonations" formControlName="donationKind" value="both">
+                        <label for="bothDonations">
+                            <div class="option-card">
+                                <i class="fas fa-hand-holding-heart"></i>
+                                <h3>Both Options</h3>
+                                <p>Donate devices and share your internet connection</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="error-message"
+                    *ngIf="donationType.controls['donationKind'].errors?.['required'] && donationType.controls['donationKind'].touched">
+                    Please select a donation type
+                </div>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="isOrganization" formControlName="isOrganization">
+                        <label for="isOrganization">
+                            I'm donating on behalf of an organization
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" *ngIf="donationType.value.isOrganization"
+                    [class.invalid]="donationType.controls['organizationName'].invalid && donationType.controls['organizationName'].touched">
+                    <label for="organizationName">Organization Name *</label>
+                    <input type="text" id="organizationName" formControlName="organizationName"
+                        placeholder="Your organization's name">
+                    <div class="error-message"
+                        *ngIf="donationType.controls['organizationName'].errors?.['required'] && donationType.controls['organizationName'].touched">
+                        Organization name is required
+                    </div>
+                    <div class="error-message"
+                        *ngIf="donationType.controls['organizationName'].errors?.['minlength'] && donationType.controls['organizationName'].touched">
+                        Minimum 2 characters
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button type="button" class="back-button" (click)="prevStep()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="next-button" (click)="nextStep()" [disabled]="donationType.invalid">
+                    Continue to Details <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Donation Details -->
+        <div class="form-step" *ngIf="currentStep === 3">
+            <h2 class="step-title">Donation Details</h2>
+            <p class="step-description">Provide more information about your donation.</p>
+
+            <!-- Key change: formGroupName added -->
+            <div formGroupName="donationDetails">
+                <!-- Device Donation Fields -->
+                <div *ngIf="showDeviceFields" class="donation-section">
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-laptop"></i> Device Information
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group"
+                            [class.invalid]="donationDetails.controls['deviceType'].invalid && donationDetails.controls['deviceType'].touched">
+                            <label for="deviceType">Device Type *</label>
+                            <select id="deviceType" formControlName="deviceType">
+                                <option value="" disabled selected>Select device type</option>
+                                <option *ngFor="let type of deviceTypes" [value]="type">{{ type }}</option>
+                            </select>
+                            <div class="error-message"
+                                *ngIf="donationDetails.controls['deviceType'].errors?.['required'] && donationDetails.controls['deviceType'].touched">
+                                Device type is required
+                            </div>
+                        </div>
+
+                        <div class="form-group"
+                            [class.invalid]="donationDetails.controls['deviceCondition'].invalid && donationDetails.controls['deviceCondition'].touched">
+                            <label for="deviceCondition">Condition *</label>
+                            <select id="deviceCondition" formControlName="deviceCondition">
+                                <option value="" disabled selected>Select condition</option>
+                                <option *ngFor="let condition of deviceConditions" [value]="condition">{{ condition }}
+                                </option>
+                            </select>
+                            <div class="error-message"
+                                *ngIf="donationDetails.controls['deviceCondition'].errors?.['required'] && donationDetails.controls['deviceCondition'].touched">
+                                Condition is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group"
+                            [class.invalid]="donationDetails.controls['deviceQuantity'].invalid && donationDetails.controls['deviceQuantity'].touched">
+                            <label for="deviceQuantity">Quantity *</label>
+                            <input type="number" id="deviceQuantity" formControlName="deviceQuantity" min="1"
+                                placeholder="How many devices?">
+                            <div class="error-message"
+                                *ngIf="donationDetails.controls['deviceQuantity'].errors?.['required'] && donationDetails.controls['deviceQuantity'].touched">
+                                Quantity is required
+                            </div>
+                            <div class="error-message"
+                                *ngIf="donationDetails.controls['deviceQuantity'].errors?.['min'] && donationDetails.controls['deviceQuantity'].touched">
+                                Minimum 1 device
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="deviceAge">Approximate Age (years)</label>
+                            <input type="number" id="deviceAge" formControlName="deviceAge" min="0"
+                                placeholder="How old is the device?">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="hasCharger" formControlName="hasCharger">
+                                <label for="hasCharger">
+                                    Includes charger/power cable
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="hasAccessories" formControlName="hasAccessories">
+                                <label for="hasAccessories">
+                                    Includes additional accessories
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deviceDescription">Additional Notes</label>
+                        <textarea id="deviceDescription" formControlName="deviceDescription"
+                            placeholder="Any special details about the device(s)?" rows="3"></textarea>
+                        <div class="character-count">
+                            {{ donationDetails.controls['deviceDescription'].value?.length || 0 }}/500
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotspot Donation Fields -->
+                <div *ngIf="showHotspotFields" class="donation-section">
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-wifi"></i> Hotspot Information
+                    </h3>
+
+                    <div class="form-group"
+                        [class.invalid]="donationDetails.controls['hotspotAvailability'].invalid && donationDetails.controls['hotspotAvailability'].touched">
+                        <label for="hotspotAvailability">Availability *</label>
+                        <textarea id="hotspotAvailability" formControlName="hotspotAvailability"
+                            placeholder="When is your hotspot available? (e.g., Weekdays 8am-5pm, 24/7, etc.)"
+                            rows="2"></textarea>
+                        <div class="error-message"
+                            *ngIf="donationDetails.controls['hotspotAvailability'].errors?.['required'] && donationDetails.controls['hotspotAvailability'].touched">
+                            Please describe when your hotspot is available
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="hotspotSpeed">Internet Speed (approx.)</label>
+                            <input type="text" id="hotspotSpeed" formControlName="hotspotSpeed"
+                                placeholder="e.g., 10Mbps, 50Mbps">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hotspotDataLimit">Data Limit (if any)</label>
+                            <input type="text" id="hotspotDataLimit" formControlName="hotspotDataLimit"
+                                placeholder="e.g., 100GB/month, Unlimited">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hotspotSchedule">Preferred Schedule</label>
+                        <input type="text" id="hotspotSchedule" formControlName="hotspotSchedule"
+                            placeholder="e.g., 2 hours per student, Max 5 students at a time">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hotspotFee">Usage Fee (if any)</label>
+                        <input type="text" id="hotspotFee" formControlName="hotspotFee"
+                            placeholder="e.g., Free, $5/hour, 500NGN per day">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hotspotDescription">Additional Notes</label>
+                        <textarea id="hotspotDescription" formControlName="hotspotDescription"
+                            placeholder="Any special instructions or details about your hotspot?" rows="3"></textarea>
+                        <div class="character-count">
+                            {{ donationDetails.controls['hotspotDescription'].value?.length || 0 }}/500
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-actions">
+                <button type="button" class="back-button" (click)="prevStep()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="submit" class="submit-button" [disabled]="isSubmitting || donorForm.invalid">
+                    <span *ngIf="!isSubmitting">Complete Registration</span>
+                    <span *ngIf="isSubmitting">
+                        <i class="fas fa-spinner fa-spin"></i> Processing...
+                    </span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

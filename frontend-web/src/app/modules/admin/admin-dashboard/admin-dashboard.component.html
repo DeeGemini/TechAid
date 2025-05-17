@@ -1,0 +1,29 @@
+<div class="admin-dashboard-container">
+    <h2 class="page-title">Admin Dashboard</h2>
+  
+    <div class="dashboard-overview">
+      <div class="overview-card">
+        <h3>Schools Awaiting Verification</h3>
+        <p>{{ verificationQueueCount }}</p>
+        <button class="secondary-button" routerLink="/admin/school-verification">View Schools</button>
+      </div>
+  
+      <div class="overview-card">
+        <h3>Total Registered Users</h3>
+        <p>{{ totalUsers }}</p>
+        <button class="secondary-button" routerLink="/admin/user-management">Manage Users</button>
+      </div>
+  
+      <div class="overview-card">
+        <h3>Total Donations Received</h3>
+        <p>{{ totalDonations }}</p>
+        <button class="secondary-button" routerLink="/admin/donation-management">View Donations</button>
+      </div>
+  
+      <div class="overview-card">
+        <h3>Active Hubs/Hotspots</h3>
+        <p>{{ activeHubs }}</p>
+        <button class="secondary-button" routerLink="/admin/hub-management">Manage Hubs</button>
+      </div>
+    </div>
+  </div>

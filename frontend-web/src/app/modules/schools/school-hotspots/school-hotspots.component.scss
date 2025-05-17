@@ -1,0 +1,758 @@
+@import '../../../../assets/styles/variables';
+@import '../../../../assets/styles/mixins';
+
+.hotspots-container {
+  padding: 2rem;
+  min-height: 100vh;
+  position: relative;
+
+  .hotspots-header {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: $primary-color;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: $gray-dark;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .search-bar {
+        flex: 1;
+        position: relative;
+
+        i {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: $gray-medium;
+        }
+
+        input {
+          width: 90%;
+          padding: 0.75rem 1rem 0.75rem 2.5rem;
+          border-radius: 6px;
+          border: 1px solid $gray-light;
+          background-color: white;
+          color: $gray-dark;
+          @include transition;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-light;
+            box-shadow: 0 0 0 2px rgba($primary-light, 0.2);
+          }
+        }
+      }
+
+      .view-actions {
+        display: flex;
+        gap: 0.75rem;
+
+        button {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1rem;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
+          @include transition;
+
+          i {
+            font-size: 0.9rem;
+          }
+        }
+
+        .filter-button {
+          background-color: white;
+          border: 1px solid $gray-light;
+          color: $gray-dark;
+
+          &:hover {
+            background-color: $gray-light;
+          }
+        }
+
+        .view-toggle {
+          background-color: $primary-color;
+          color: white;
+          border: none;
+
+          &:hover {
+            background-color: $primary-dark;
+          }
+        }
+      }
+    }
+
+    .filter-panel {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-weight: 500;
+          color: $gray-dark;
+          font-size: 0.9rem;
+        }
+
+        select {
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
+          border: 1px solid $gray-light;
+          background-color: white;
+          color: $gray-dark;
+          @include transition;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-light;
+          }
+        }
+
+        input[type="range"] {
+          width: 100%;
+          height: 6px;
+          border-radius: 3px;
+          background: $gray-light;
+          outline: none;
+          appearance: none;
+          -webkit-appearance: none;
+
+          &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: $primary-color;
+            cursor: pointer;
+          }
+
+          &::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: $primary-color;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  .hotspots-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .hotspots-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+
+      .empty-state {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 2rem;
+        background-color: white;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+        i {
+          font-size: 3rem;
+          color: $primary-light;
+          margin-bottom: 1.5rem;
+        }
+
+        h3 {
+          font-size: 1.5rem;
+          color: $primary-dark;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          color: $gray-dark;
+          margin-bottom: 1.5rem;
+        }
+
+        .reset-button {
+          padding: 0.75rem 1.5rem;
+          background-color: $primary-color;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          font-weight: 600;
+          cursor: pointer;
+          @include transition;
+
+          &:hover {
+            background-color: $primary-dark;
+          }
+        }
+      }
+
+      .hotspot-card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        display: flex;
+        gap: 1.25rem;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .hotspot-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          @include flex-center;
+          font-size: 1.25rem;
+          flex-shrink: 0;
+
+          &.cost-free {
+            background-color: rgba(#4CAF50, 0.1);
+            color: #4CAF50;
+          }
+
+          &.cost-paid {
+            background-color: rgba(#2196F3, 0.1);
+            color: #2196F3;
+          }
+        }
+
+        .hotspot-info {
+          flex: 1;
+
+          h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $dark-bg;
+            margin-bottom: 0.25rem;
+          }
+
+          .provider {
+            font-size: 0.9rem;
+            color: $gray-dark;
+            margin-bottom: 0.75rem;
+          }
+
+          .hotspot-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+
+            span {
+              font-size: 0.8rem;
+              padding: 0.25rem 0.5rem;
+              border-radius: 4px;
+            }
+
+            .distance {
+              background-color: rgba($primary-color, 0.1);
+              color: $primary-color;
+            }
+
+            .speed {
+              &.speed-low {
+                background-color: rgba(#FFC107, 0.1);
+                color: #FFC107;
+              }
+
+              &.speed-medium {
+                background-color: rgba(#FF9800, 0.1);
+                color: #FF9800;
+              }
+
+              &.speed-high {
+                background-color: rgba(#4CAF50, 0.1);
+                color: #4CAF50;
+              }
+            }
+
+            .cost {
+              &.cost-free {
+                background-color: rgba(#4CAF50, 0.1);
+                color: #4CAF50;
+              }
+
+              &.cost-paid {
+                background-color: rgba(#2196F3, 0.1);
+                color: #2196F3;
+              }
+            }
+          }
+
+          .hotspot-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .availability {
+              font-size: 0.8rem;
+              color: $gray-dark;
+              display: flex;
+              align-items: center;
+              gap: 0.25rem;
+
+              i {
+                font-size: 0.7rem;
+              }
+            }
+
+            .status {
+              font-size: 0.75rem;
+              font-weight: 600;
+              padding: 0.25rem 0.75rem;
+              border-radius: 20px;
+
+              &.status-available {
+                background-color: rgba(#4CAF50, 0.1);
+                color: #4CAF50;
+              }
+
+              &.status-requested {
+                background-color: rgba(#FFC107, 0.1);
+                color: #FFC107;
+              }
+
+              &.status-approved {
+                background-color: rgba(#2196F3, 0.1);
+                color: #2196F3;
+              }
+
+              &.status-rejected {
+                background-color: rgba(#F44336, 0.1);
+                color: #F44336;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .hotspots-map {
+      height: 500px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      position: relative;
+
+      .map-container {
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+
+        .map-placeholder {
+          height: 100%;
+          width: 100%;
+          @include flex-center;
+          flex-direction: column;
+          background-color: $gray-light;
+          color: $gray-dark;
+
+          i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+          }
+
+          p {
+            font-size: 1.1rem;
+          }
+        }
+
+        .map-legend {
+          position: absolute;
+          bottom: 1rem;
+          right: 1rem;
+          background-color: white;
+          padding: 0.75rem 1rem;
+          border-radius: 6px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+
+            .legend-icon {
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              display: inline-block;
+
+              &.cost-free {
+                background-color: #4CAF50;
+              }
+
+              &.cost-paid {
+                background-color: #2196F3;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .hotspot-details {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 100%;
+    max-width: 450px;
+    background-color: white;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    transform: translateX(100%);
+    @include transition;
+
+    &.show {
+      transform: translateX(0);
+    }
+
+    .details-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid $gray-light;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: $primary-dark;
+        margin: 0;
+      }
+
+      .close-button {
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        color: $gray-dark;
+        cursor: pointer;
+        @include transition;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+
+    .details-content {
+      padding: 1.5rem;
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
+
+      .detail-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        i {
+          font-size: 1.25rem;
+          color: $primary-color;
+          margin-top: 0.25rem;
+        }
+
+        h4 {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: $gray-dark;
+          margin-bottom: 0.25rem;
+        }
+
+        p {
+          font-size: 1rem;
+          color: $dark-bg;
+          margin: 0;
+        }
+
+        small {
+          font-size: 0.8rem;
+          color: $gray-medium;
+        }
+
+        .speed-low {
+          color: #FFC107;
+        }
+
+        .speed-medium {
+          color: #FF9800;
+        }
+
+        .speed-high {
+          color: #4CAF50;
+        }
+
+        .cost-free {
+          color: #4CAF50;
+        }
+
+        .cost-paid {
+          color: #2196F3;
+        }
+
+        .status-available {
+          color: #4CAF50;
+        }
+
+        .status-requested {
+          color: #FFC107;
+        }
+
+        .status-approved {
+          color: #2196F3;
+        }
+
+        .status-rejected {
+          color: #F44336;
+        }
+      }
+    }
+
+    .details-actions {
+      padding: 1.5rem;
+      border-top: 1px solid $gray-light;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+
+      button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        @include transition;
+      }
+
+      .secondary-button {
+        background-color: white;
+        border: 1px solid $gray-light;
+        color: $gray-dark;
+
+        &:hover {
+          background-color: $gray-light;
+        }
+      }
+
+      .primary-button {
+        background-color: $primary-color;
+        color: white;
+        border: none;
+
+        &:hover {
+          background-color: $primary-dark;
+        }
+      }
+
+      .disabled-button {
+        background-color: $gray-light;
+        color: $gray-dark;
+        border: none;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .hotspot-details.show {
+    transform: translateX(0);
+  }
+}
+
+// Dark mode styles
+.dark-mode {
+  .hotspots-container {
+    background-color: $dark-bg;
+    color: $dark-text;
+
+    .hotspots-header {
+      h1 {
+        color: $primary-light;
+      }
+
+      .subtitle {
+        color: $gray-medium;
+      }
+
+      .search-controls {
+        .search-bar {
+          input {
+            background-color: lighten($dark-bg, 5%);
+            border-color: lighten($dark-bg, 15%);
+            color: $dark-text;
+          }
+        }
+
+        .view-actions {
+          .filter-button {
+            background-color: lighten($dark-bg, 5%);
+            border-color: lighten($dark-bg, 15%);
+            color: $dark-text;
+          }
+        }
+      }
+
+      .filter-panel {
+        background-color: lighten($dark-bg, 5%);
+
+        .filter-group {
+          label {
+            color: $gray-medium;
+          }
+
+          select {
+            background-color: lighten($dark-bg, 10%);
+            border-color: lighten($dark-bg, 15%);
+            color: $dark-text;
+          }
+        }
+      }
+    }
+
+    .hotspots-content {
+      .hotspots-list {
+        .empty-state {
+          background-color: lighten($dark-bg, 5%);
+
+          h3 {
+            color: $primary-light;
+          }
+
+          p {
+            color: $gray-medium;
+          }
+        }
+
+        .hotspot-card {
+          background-color: lighten($dark-bg, 5%);
+
+          h3 {
+            color: $dark-text;
+          }
+
+          .provider {
+            color: $gray-medium;
+          }
+
+          .hotspot-footer {
+            .availability {
+              color: $gray-medium;
+            }
+          }
+        }
+      }
+
+      .hotspots-map {
+        background-color: lighten($dark-bg, 5%);
+
+        .map-container {
+          .map-placeholder {
+            background-color: lighten($dark-bg, 10%);
+            color: $gray-medium;
+          }
+
+          .map-legend {
+            background-color: lighten($dark-bg, 10%);
+            color: $dark-text;
+          }
+        }
+      }
+    }
+
+    .hotspot-details {
+      background-color: lighten($dark-bg, 5%);
+      color: $dark-text;
+
+      .details-header {
+        border-bottom-color: lighten($dark-bg, 15%);
+
+        h2 {
+          color: $primary-light;
+        }
+      }
+
+      .details-content {
+        .detail-row {
+          h4 {
+            color: $gray-medium;
+          }
+
+          p {
+            color: $dark-text;
+          }
+        }
+      }
+
+      .details-actions {
+        border-top-color: lighten($dark-bg, 15%);
+
+        .secondary-button {
+          background-color: lighten($dark-bg, 10%);
+          border-color: lighten($dark-bg, 15%);
+          color: $dark-text;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .hotspots-container {
+    padding: 1rem;
+
+    .hotspot-details {
+      max-width: 100%;
+    }
+  }
+}

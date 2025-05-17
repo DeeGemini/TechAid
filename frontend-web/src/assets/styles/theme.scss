@@ -1,0 +1,12 @@
+@import 'variables';
+@import 'theme.light.scss'; // Default to light mode
+
+// You can add dark mode styles here if you decide to implement it later
+// body.dark-mode {
+//   background-color: $neutral-darkest;
+//   color: $neutral-lightest;
+//
+//   a {
+//     color: lighten($primary-medium, 10%);
+//   }
+// }

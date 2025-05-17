@@ -1,0 +1,73 @@
+@import 'variables';
+@import 'mixins';
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: $neutral-lightest;
+    color: $text-primary;
+}
+
+a {
+    text-decoration: none;
+    color: $text-link;
+    transition: color $transition-fast;
+
+    &:hover {
+        color: darken($text-link, 10%);
+    }
+}
+
+button {
+    padding: $spacing-sm $spacing-md;
+    border: none;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color $transition-fast, color $transition-fast;
+    @include box-shadow($level: 1);
+
+    &:focus {
+        outline: none;
+    }
+
+    &:active {
+        @include box-shadow($level: 0);
+    }
+}
+
+.primary-button {
+    background-color: $primary-medium;
+    color: white;
+
+    &:hover {
+        background-color: darken($primary-medium, 10%);
+    }
+}
+
+.secondary-button {
+    background-color: $accent-medium;
+    color: white;
+
+    &:hover {
+        background-color: darken($accent-medium, 10%);
+    }
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: $spacing-sm;
+    margin-bottom: $spacing-md;
+    border: 1px solid $neutral-medium;
+    border-radius: $border-radius-sm;
+    font-size: 1rem;
+    box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+        border-color: $primary-medium;
+        box-shadow: 0 0 5px rgba($primary-medium, 0.5);
+    }
+}

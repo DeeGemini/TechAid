@@ -1,0 +1,148 @@
+<div class="devices-container">
+    <div class="devices-header">
+        <h1>Device Requests</h1>
+        <p class="subtitle">Manage and track your device requests for students</p>
+
+        <div class="header-actions">
+            <div class="filter-control">
+                <label for="statusFilter">Filter by status:</label>
+                <select id="statusFilter" [(ngModel)]="selectedStatus">
+                    <option *ngFor="let status of statuses" [value]="status">{{status | titlecase}}</option>
+                </select>
+            </div>
+
+            <button class="request-button" (click)="toggleRequestForm()">
+                <!-- <fa-icon [icon]="['fas', 'plus']"></fa-icon> -->
+                <i class="fas fa-plus"></i>
+                <span>{{showRequestForm ? 'Cancel' : 'New Request'}}</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="request-form-container" *ngIf="showRequestForm">
+        <form [formGroup]="deviceForm" (ngSubmit)="submitRequest()">
+            <h3>New Device Request</h3>
+
+            <div class="form-group">
+                <label for="deviceType">Device Type</label>
+                <select id="deviceType" formControlName="deviceType" required>
+                    <option value="" disabled selected>Select device type</option>
+                    <option *ngFor="let type of deviceTypes" [value]="type">{{type}}</option>
+                </select>
+                <small *ngIf="deviceForm.get('deviceType')?.invalid && deviceForm.get('deviceType')?.touched">
+                    Please select a device type
+                </small>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" formControlName="quantity" min="1" required>
+                    <small *ngIf="deviceForm.get('quantity')?.invalid && deviceForm.get('quantity')?.touched">
+                        Quantity must be at least 1
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority</label>
+                    <div class="priority-options">
+                        <label *ngFor="let priority of priorities">
+                            <input type="radio" formControlName="priority" [value]="priority.value">
+                            <span
+                                [class]="'priority-badge ' + getPriorityClass(priority.value)">{{priority.label}}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Notes (Optional)</label>
+                <textarea id="notes" formControlName="notes" rows="3"
+                    placeholder="Explain how these devices will be used..."></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="cancel-button" (click)="toggleRequestForm()">Cancel</button>
+                <button type="submit" class="submit-button" [disabled]="deviceForm.invalid">Submit Request</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="requests-list">
+        <div *ngIf="filteredRequests.length === 0" class="empty-state">
+            <!-- <fa-icon [icon]="['fas', 'laptop']"></fa-icon> -->
+            <i class="fas fa-laptop"></i>
+            <h3>No device requests found</h3>
+            <p *ngIf="selectedStatus !== 'all'">Try changing your status filter or create a new request</p>
+            <button class="request-button" (click)="toggleRequestForm()" *ngIf="selectedStatus === 'all'">
+                <!-- <fa-icon [icon]="['fas', 'plus']"></fa-icon> -->
+                <i class="fas fa-plus"></i>
+                <span>Create Your First Request</span>
+            </button>
+        </div>
+
+        <div class="request-item" *ngFor="let request of filteredRequests" [class.expanded]="request.expanded"
+            (click)="request.expanded = !request.expanded">
+            <div class="request-summary">
+                <div class="device-icon">
+                    <!-- <fa-icon [icon]="['fas', getDeviceIcon(request.deviceType)]"></fa-icon> -->
+                    <i class="fas" [ngClass]="'fa-' + getDeviceIcon(request.deviceType)"></i>
+                </div>
+
+                <div class="request-info">
+                    <h4>{{request.deviceType}} (x{{request.quantity}})</h4>
+                    <div class="request-meta">
+                        <span class="request-id">#{{request.id}}</span>
+                        <span class="request-date">{{request.requestedDate | date:'mediumDate'}}</span>
+                        <span class="priority-badge" [class]="getPriorityClass(request.priority)">
+                            {{request.priority | titlecase}} Priority
+                        </span>
+                    </div>
+                </div>
+
+                <div class="request-status">
+                    <span class="status-badge" [class]="getStatusClass(request.status)">
+                        {{request.status | titlecase}}
+                    </span>
+                    <!-- <fa-icon [icon]="['fas', request.expanded ? 'chevron-up' : 'chevron-down']"></fa-icon> -->
+                    <i class="fas" [ngClass]="request.expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                </div>
+            </div>
+
+            <div class="request-details" *ngIf="request.expanded">
+                <div class="detail-row">
+                    <span class="detail-label">Requested On:</span>
+                    <span>{{request.requestedDate | date:'fullDate'}}</span>
+                </div>
+
+                <div class="detail-row" *ngIf="request.donorName">
+                    <span class="detail-label">Donor:</span>
+                    <span>{{request.donorName}}</span>
+                </div>
+
+                <div class="detail-row" *ngIf="request.fulfillmentDate">
+                    <span class="detail-label">Fulfillment Date:</span>
+                    <span>{{request.fulfillmentDate | date:'fullDate'}}</span>
+                </div>
+
+                <div class="detail-row" *ngIf="request.notes">
+                    <span class="detail-label">Notes:</span>
+                    <p>{{request.notes}}</p>
+                </div>
+
+                <div class="detail-actions" *ngIf="request.status === 'pending'">
+                    <button class="edit-button">
+                        <!-- <fa-icon [icon]="['fas', 'edit']"></fa-icon> -->
+                        <i class="fas fa-edit"></i>
+                        Edit Request
+                    </button>
+                    <button class="cancel-button">
+                        <!-- <fa-icon [icon]="['fas', 'times']"></fa-icon> -->
+                        <i class="fas fa-times"></i>
+                        Cancel Request
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

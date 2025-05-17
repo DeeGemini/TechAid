@@ -1,0 +1,34 @@
+<div class="registration-type-container">
+    <div class="registration-header">
+        <div class="logo-container">
+            <i class="fas fa-laptop-code logo-icon"></i>
+            <span class="logo-text">TechAid</span>
+        </div>
+        <h1>Join TechAid</h1>
+        <p>Select your registration type to continue</p>
+    </div>
+
+    <div class="registration-options">
+        <div class="option-card" (click)="selectRegistrationType('school')">
+            <div class="option-icon">
+                <i class="fas fa-school"></i>
+            </div>
+            <h2>School/Institution</h2>
+            <p>Register your educational institution to receive device donations and support</p>
+            <button class="select-button">Register as School</button>
+        </div>
+
+        <div class="option-card" (click)="selectRegistrationType('donor')">
+            <div class="option-icon">
+                <i class="fas fa-hand-holding-heart"></i>
+            </div>
+            <h2>Donor/Supporter</h2>
+            <p>Register to donate devices or share your internet as a hotspot</p>
+            <button class="select-button">Register as Donor</button>
+        </div>
+    </div>
+
+    <div class="login-prompt">
+        <p>Already have an account? <a routerLink="/login">Log in here</a></p>
+    </div>
+</div>

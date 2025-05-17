@@ -7,6 +7,7 @@ import mimetypes
 
 from app.core.config import SECRET_KEY
 from app.api.endpoints.google_auth import google_router
+from app.api.endpoints.email_auth import email_auth_router
 
 app = FastAPI()
 if not SECRET_KEY:
@@ -25,6 +26,7 @@ app.add_middleware(
 )
 
 app.include_router(router=google_router, tags=['Google Auth'])
+app.include_router(router=email_auth_router, tags=['Email Auth'])
 
 
 

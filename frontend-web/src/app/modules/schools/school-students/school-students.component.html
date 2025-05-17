@@ -1,0 +1,276 @@
+<div class="students-container">
+    <div class="students-header">
+      <h1>Student Management</h1>
+      <p class="subtitle">Manage your students, device assignments, and internet access</p>
+      
+      <div class="controls-row">
+        <div class="filter-control">
+          <label for="statusFilter">Filter by status:</label>
+          <select id="statusFilter" [(ngModel)]="selectedStatus" (ngModelChange)="filterStudents()">
+            <option *ngFor="let option of statusOptions" [value]="option.value">{{option.label}}</option>
+          </select>
+        </div>
+        
+        <div class="view-actions">
+          <button class="view-toggle" (click)="toggleViewMode()">
+            <!-- <fa-icon [icon]="['fas', viewMode === 'list' ? 'th-large' : 'list']"></fa-icon> -->
+            <i class="fas" [ngClass]="viewMode === 'list' ? 'fa-th-large' : 'fa-list'"></i>
+            <span>{{viewMode === 'list' ? 'Grid View' : 'List View'}}</span>
+          </button>
+          
+          <button class="add-button" (click)="openAddStudentForm()">
+            <!-- <fa-icon [icon]="['fas', 'user-plus']"></fa-icon> -->
+            <i class="fas fa-user-plus"></i>
+            <span>Add Student</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="student-form-container" *ngIf="showStudentForm">
+      <form [formGroup]="studentForm" (ngSubmit)="submitStudentForm()">
+        <div class="form-header">
+          <h3>{{isEditing ? 'Edit Student' : 'Add New Student'}}</h3>
+          <button type="button" class="close-button" (click)="showStudentForm = false">
+            <!-- <fa-icon [icon]="['fas', 'times']"></fa-icon> -->
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" formControlName="name" required>
+            <small *ngIf="studentForm.get('name')?.invalid && studentForm.get('name')?.touched">
+              Name is required
+            </small>
+          </div>
+          
+          <div class="form-group">
+            <label for="grade">Grade/Class</label>
+            <select id="grade" formControlName="grade" required>
+              <option value="" disabled selected>Select grade</option>
+              <option *ngFor="let grade of grades" [value]="grade">{{grade}}</option>
+            </select>
+            <small *ngIf="studentForm.get('grade')?.invalid && studentForm.get('grade')?.touched">
+              Grade is required
+            </small>
+          </div>
+          
+          <div class="form-group">
+            <label for="studentId">Student ID</label>
+            <input type="text" id="studentId" formControlName="studentId" required>
+            <small *ngIf="studentForm.get('studentId')?.invalid && studentForm.get('studentId')?.touched">
+              Student ID is required
+            </small>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email (Optional)</label>
+            <input type="email" id="email" formControlName="email">
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">Phone (Optional)</label>
+            <input type="tel" id="phone" formControlName="phone">
+          </div>
+          
+          <div class="form-group">
+            <label for="guardian">Guardian (Optional)</label>
+            <input type="text" id="guardian" formControlName="guardian">
+          </div>
+          
+          <div class="form-group">
+            <label>Status</label>
+            <div class="status-options">
+              <label>
+                <input type="radio" formControlName="status" value="active">
+                <span class="status-badge status-active">Active</span>
+              </label>
+              <label>
+                <input type="radio" formControlName="status" value="inactive">
+                <span class="status-badge status-inactive">Inactive</span>
+              </label>
+              <label>
+                <input type="radio" formControlName="status" value="graduated">
+                <span class="status-badge status-graduated">Graduated</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="cancel-button" (click)="showStudentForm = false">Cancel</button>
+          <button type="submit" class="submit-button" [disabled]="studentForm.invalid">
+            {{isEditing ? 'Update Student' : 'Add Student'}}
+          </button>
+        </div>
+      </form>
+    </div>
+  
+    <div class="students-content">
+      <div *ngIf="filteredStudents.length === 0" class="empty-state">
+        <!-- <fa-icon [icon]="['fas', 'users']"></fa-icon> -->
+        <i class="fas fa-users"></i>
+        <h3>No students found</h3>
+        <p>Try changing your status filter or add a new student</p>
+        <button class="add-button" (click)="openAddStudentForm()">
+          <!-- <fa-icon [icon]="['fas', 'user-plus']"></fa-icon> -->
+            <i class="fas fa-user-plus"></i>
+          <span>Add Student</span>
+        </button>
+      </div>
+  
+      <div *ngIf="viewMode === 'list' && filteredStudents.length > 0" class="students-list">
+        <div class="list-header">
+          <div class="header-cell name">Student</div>
+          <div class="header-cell grade">Grade</div>
+          <div class="header-cell id">Student ID</div>
+          <div class="header-cell device">Device</div>
+          <div class="header-cell hotspot">Hotspot</div>
+          <div class="header-cell status">Status</div>
+          <div class="header-cell actions">Actions</div>
+        </div>
+        
+        <div class="list-body">
+          <div class="student-row" *ngFor="let student of filteredStudents">
+            <div class="cell name">
+              <div class="student-avatar">
+                {{student.name.charAt(0)}}
+              </div>
+              <div class="student-info">
+                <h4>{{student.name}}</h4>
+                <small *ngIf="student.contact.guardian">Guardian: {{student.contact.guardian}}</small>
+              </div>
+            </div>
+            
+            <div class="cell grade">{{student.grade}}</div>
+            
+            <div class="cell id">{{student.studentId}}</div>
+            
+            <div class="cell device">
+              <div *ngIf="student.device; else noDevice">
+                <p>{{student.device.type}}</p>
+                <small [class]="getDeviceConditionClass(student.device.condition)">
+                  {{student.device.condition | titlecase}}
+                </small>
+              </div>
+              <ng-template #noDevice>
+                <button class="assign-button" (click)="assignDevice(student)">
+                  Assign Device
+                </button>
+              </ng-template>
+            </div>
+            
+            <div class="cell hotspot">
+              <div *ngIf="student.hotspotAccess; else noHotspot">
+                <p>{{student.hotspotAccess.location}}</p>
+                <small *ngIf="student.hotspotAccess.expiryDate">
+                  Expires {{student.hotspotAccess.expiryDate | date:'shortDate'}}
+                </small>
+              </div>
+              <ng-template #noHotspot>
+                <button class="assign-button" (click)="grantHotspotAccess(student)">
+                  Grant Access
+                </button>
+              </ng-template>
+            </div>
+            
+            <div class="cell status">
+              <span class="status-badge" [class]="getStatusClass(student.status)">
+                {{student.status | titlecase}}
+              </span>
+            </div>
+            
+            <div class="cell actions">
+              <button class="edit-button" (click)="openEditStudentForm(student)">
+                <!-- <fa-icon [icon]="['fas', 'edit']"></fa-icon> -->
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div *ngIf="viewMode === 'grid' && filteredStudents.length > 0" class="students-grid">
+        <div class="student-card" *ngFor="let student of filteredStudents">
+          <div class="card-header">
+            <div class="student-avatar">
+              {{student.name.charAt(0)}}
+            </div>
+            <div class="student-info">
+              <h4>{{student.name}}</h4>
+              <p>{{student.grade}}</p>
+            </div>
+            <span class="status-badge" [class]="getStatusClass(student.status)">
+              {{student.status | titlecase}}
+            </span>
+          </div>
+          
+          <div class="card-body">
+            <div class="detail-row">
+              <!-- <fa-icon [icon]="['fas', 'id-card']"></fa-icon> -->
+                <i class="fas fa-id-card"></i>
+              <span>{{student.studentId}}</span>
+            </div>
+            
+            <div *ngIf="student.contact.guardian" class="detail-row">
+              <!-- <fa-icon [icon]="['fas', 'user-shield']"></fa-icon> -->
+                <i class="fas fa-user-shield"></i>
+              <span>{{student.contact.guardian}}</span>
+            </div>
+            
+            <div class="detail-section">
+              <h5>Device Assignment</h5>
+              <div *ngIf="student.device; else noDeviceGrid" class="detail-row">
+                <!-- <fa-icon [icon]="['fas', 'laptop']"></fa-icon> -->
+                <i class="fas fa-laptop"></i>
+                <div>
+                  <p>{{student.device.type}}</p>
+                  <small [class]="getDeviceConditionClass(student.device.condition)">
+                    {{student.device.condition | titlecase}} condition
+                  </small>
+                </div>
+              </div>
+              <ng-template #noDeviceGrid>
+                <button class="assign-button" (click)="assignDevice(student)">
+                  <!-- <fa-icon [icon]="['fas', 'plus']"></fa-icon> -->
+                    <i class="fas fa-plus"></i>
+                  Assign Device
+                </button>
+              </ng-template>
+            </div>
+            
+            <div class="detail-section">
+              <h5>Hotspot Access</h5>
+              <div *ngIf="student.hotspotAccess; else noHotspotGrid" class="detail-row">
+                <!-- <fa-icon [icon]="['fas', 'wifi']"></fa-icon> -->
+                <i class="fas fa-wifi"></i>
+                <div>
+                  <p>{{student.hotspotAccess.location}}</p>
+                  <small *ngIf="student.hotspotAccess.expiryDate">
+                    Expires {{student.hotspotAccess.expiryDate | date:'shortDate'}}
+                  </small>
+                </div>
+              </div>
+              <ng-template #noHotspotGrid>
+                <button class="assign-button" (click)="grantHotspotAccess(student)">
+                  <!-- <fa-icon [icon]="['fas', 'plus']"></fa-icon> -->
+                    <i class="fas fa-plus"></i>
+                  Grant Access
+                </button>
+              </ng-template>
+            </div>
+          </div>
+          
+          <div class="card-actions">
+            <button class="edit-button" (click)="openEditStudentForm(student)">
+              <!-- <fa-icon [icon]="['fas', 'edit']"></fa-icon> -->
+                <i class="fas fa-edit"></i>
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
