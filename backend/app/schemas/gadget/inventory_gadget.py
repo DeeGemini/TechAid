@@ -8,4 +8,4 @@ class GadgetinventoryBase(BaseModel):
     
 
 class Gadgetinventory(GadgetinventoryBase):
-    Gadgetinventory_id: str
+    gadgetinventory_id: str

@@ -1,6 +1,7 @@
 .env
 */core/config.py
-venv/
+ven
 **/__pycache__/
 client_secret.json
 notes.txt
+.techenv

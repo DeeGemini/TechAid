@@ -9,3 +9,4 @@ def create_school(school: SchoolBase):
     school_data = school.model_dump()
     result = schools_collection.insert_one(school_data)
     return str(result.inserted_id)
+    isVerified : bool = False  # Indicates if the school is verified by an admin
