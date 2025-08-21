@@ -1,10 +1,11 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from fastapi import UploadFile, File
+from uuid import UUID
 
 
 class AllocationsBase(BaseModel):
-    allocation_id: str
+    allocation_id: UUID
     school_id: str
     gadget_type: str
     quantity : int
