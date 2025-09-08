@@ -1,6 +1,6 @@
 import uuid  # Import UUID module
 from datetime import datetime  # For default timestamp
-from app.database.mongo_db import allocations_collection  # Correct collection
+from app.database.mongo_db import donation_collection  # Correct collection
 from app.schemas.users.schools import SchoolBase
 from backend.app.schemas.gadget.gadgetdonation import GadgetdonationBase
 

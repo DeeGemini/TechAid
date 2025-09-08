@@ -13,3 +13,13 @@ async def donate_gadget(
     }
     save_donation(donation_data)  # Store in DB
     return donation_data
+
+# In donate_gadget endpoint
+def update_inventory(gadget_type: str, quantity: int):
+    # Increment inventory count
+    db.execute("""
+        INSERT INTO gadget_inventory (gadget_type, available_quantity)
+        VALUES (:type, :qty)
+        ON CONFLICT (gadget_type) DO UPDATE
+        SET available_quantity = gadget_inventory.available_quantity + :qty
+    """, {"type": gadget_type, "qty": quantity})
