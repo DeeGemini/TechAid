@@ -1,4 +1,19 @@
 # In donor_router.py
+import uuid
+from fastapi import APIRouter, Depends, Form
+from backend.app.models.GadgetDonation import GadgetDonationBase
+
+donor_router = APIRouter()
+
+# Placeholder dependency for donor authentication — replace with your real auth implementation.
+async def get_current_donor():
+    """
+    Minimal stub for FastAPI dependency that returns a donor dictionary.
+    Replace this with actual authentication/authorization logic.
+    """
+    return {"donor_id": "anonymous"}
+
+
 @donor_router.post('/donate', response_model=GadgetDonationBase)
 async def donate_gadget(
     gadget_type: str = Form(...),
