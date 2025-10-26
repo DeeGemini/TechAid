@@ -14,6 +14,22 @@ async def get_current_donor():
     return {"donor_id": "anonymous"}
 
 
+# In-memory placeholders for donations and inventory.
+# Replace these with real database persistence in production.
+DONATIONS = []
+INVENTORY = {}
+
+
+def save_donation(donation_data: dict):
+    """
+    Minimal placeholder to persist a donation and update inventory.
+    Replace with actual DB persistence logic as needed.
+    """
+    DONATIONS.append(donation_data)
+    # Update in-memory inventory; in production call DB update logic instead.
+    update_inventory(donation_data["gadget_type"], donation_data["quantity"])
+
+
 @donor_router.post('/donate', response_model=GadgetDonationBase)
 async def donate_gadget(
     gadget_type: str = Form(...),
@@ -26,15 +42,10 @@ async def donate_gadget(
         "gadget_type": gadget_type,
         "quantity": quantity
     }
-    save_donation(donation_data)  # Store in DB
+    save_donation(donation_data)  # Store in in-memory list for now
     return donation_data
 
 # In donate_gadget endpoint
 def update_inventory(gadget_type: str, quantity: int):
-    # Increment inventory count
-    db.execute("""
-        INSERT INTO gadget_inventory (gadget_type, available_quantity)
-        VALUES (:type, :qty)
-        ON CONFLICT (gadget_type) DO UPDATE
-        SET available_quantity = gadget_inventory.available_quantity + :qty
-    """, {"type": gadget_type, "qty": quantity})
+    # Increment in-memory inventory count; replace with DB operation in production.
+    INVENTORY[gadget_type] = INVENTORY.get(gadget_type, 0) + quantity
