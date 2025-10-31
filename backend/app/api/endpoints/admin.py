@@ -2,7 +2,7 @@
 from fastapi import Depends, Form, HTTPException, APIRouter
 from fastapi.responses import JSONResponse
 from app.services.schools import verify_school, get_school_by_id
-from app.schemas.schools import SchoolBase
+from app.services.schools import SchoolBase
 
 admin_router = APIRouter()
 
